@@ -1,0 +1,26 @@
+button[data-testid='print__menu'] {
+    display: none; /* hides the button */
+}
+button[data-testid='print__button'] {
+    display: none; /* hides the button */
+}
+button[data-testid='get-file__download-menu'] {
+    display: none; /* hides the button */
+}
+button[data-testid='get-file__download-button'] {
+    display: none; /* hides the button */
+}
+button[data-testid='open__menu'] {
+    display: none; /* hides the button */
+}
+button[data-testid='open__button'] {
+    display: none; /* hides the button */
+}
+
+.rpv-toolbar__item div{
+    display: flex;
+}
+
+#rpv-default-layout__sidebar-tab-1, #rpv-default-layout__sidebar-tab-2 {
+    display: none;
+}
