@@ -1,177 +1,161 @@
 import useTranslation from '@/hooks/use-translation';
 import { Link, usePage } from '@inertiajs/react';
-import { BarcodeIcon, BookOpenTextIcon, HouseIcon, InfoIcon, MailIcon, MapPinIcon, NewspaperIcon, PhoneIcon, QrCodeIcon } from 'lucide-react';
-import { StarsBackground } from '../animate-ui/backgrounds/stars';
-import PWAInstallPrompt from '../Button/PWAInstallPrompt';
-import { FooterLogo } from '../Logo/FooterLogo';
+import { MailIcon, PhoneIcon } from 'lucide-react';
 import SwitchDarkMode3D from '../Switch/SwitchDarkMode3D';
-import { Separator } from '../ui/separator';
 
 export default function Footer() {
     const { website_info, media_links } = usePage<any>().props;
     const { t, currentLocale } = useTranslation();
-
     const { url } = usePage();
 
     const isActive = (href: string) => url === href || url.startsWith(href + '/');
 
-    const defaultItems = [
-        { href: '/', icon: <HouseIcon size={18} />, label: t('Home') },
-        // { href: '/resources', icon: <BookOpenTextIcon size={18} />, label: t('Resources') },
-        // { href: '/posts', icon: <NewspaperIcon size={18} />, label: t('Posts') },
-        // { href: '/about', icon: <InfoIcon size={18} />, label: t('About') },
+    const quickLinks = [
+        { href: '/', label: t('Home'), color: 'text-yellow-400', dot: 'bg-yellow-400' },
+        { href: '/products', label: t('Products'), color: 'hover:text-indigo-400', dot: 'bg-indigo-600' },
+        { href: '/pricing', label: t('Pricing'), color: 'hover:text-green-400', dot: 'bg-green-500' },
+        { href: '/about', label: t('About'), color: 'hover:text-indigo-400', dot: 'bg-indigo-600' },
+        { href: '/support', label: t('Support'), color: 'hover:text-indigo-400', dot: 'bg-indigo-600' },
     ];
-    const tools = [
-        { href: '/barcode-generator', icon: <BarcodeIcon size={18} />, label: t('Barcode Generator') },
-        { href: '/qr-code-generator', icon: <QrCodeIcon size={18} />, label: t('QR Code Generator') },
+
+    const tools: any[] = [
+        // { href: '/barcode-generator', icon: <BarcodeIcon size={16} />, label: t('Barcode Generator') },
+        // { href: '/qr-code-generator', icon: <QrCodeIcon size={16} />, label: t('QR Code Generator') },
     ];
 
     return (
-        <footer className="relative border-t bg-primary to-transparent text-white dark:bg-gray-950">
-            <StarsBackground className="absolute inset-0 hidden dark:block" />
-
-            <div className="section-container mx-auto">
-                <div className="relative z-10 mx-auto max-w-7xl pt-14 pb-28 lg:pb-24">
-                    {/* Background Banner */}
-                    <div className="absolute right-0 bottom-0 z-0 h-auto w-full max-w-[2000px]">
-                        {/* <img
-                            src="/assets/backgrounds/footer_banner_for_light.png"
-                            alt=""
-                            className="z-0 w-[100%] max-w-7xl object-contain opacity-[15%] dark:hidden"
-                        /> */}
-                        <img
-                            src="/assets/backgrounds/footer_banner_for_dark.png"
-                            alt=""
-                            className="z-0 w-[100%] max-w-7xl object-contain opacity-[40%] lg:opacity-[15%] dark:block"
-                        />
+        <footer className="border-t border-gray-800 bg-[linear-gradient(140deg,#101828,#1e2939,#101828)] text-gray-300 dark:bg-black dark:bg-none">
+            <div className="mx-auto max-w-7xl px-4 pt-16 pb-8 sm:px-6 lg:px-8">
+                <div className="mb-12 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
+                    {/* Brand Section */}
+                    <div className="lg:col-span-2">
+                        <div className="mb-6 flex items-center space-x-3">
+                            {/* <FooterLogo /> */}
+                            <img alt="Logo" className="h-10 w-auto" src={`/assets/images/website_infos/thumb/${website_info.logo}`} />
+                            <span className="text-2xl font-bold text-white">Banalai</span>
+                        </div>
+                        <p className="mb-6 max-w-md leading-relaxed text-gray-400">
+                            {t(
+                                'Empowering libraries, schools, and organizations with flexible digital library solutions. We believe in making knowledge accessible to everyone through innovative technology.',
+                            )}
+                        </p>
+                        <div className="flex gap-2">
+                            {media_links?.map((item: any) => (
+                                <a
+                                    key={item.id}
+                                    href={item.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-700 transition-colors hover:bg-indigo-600"
+                                >
+                                    <img alt={item.name} className="h-7 w-7 object-contain" src={`/assets/images/links/thumb/${item.image}`} />
+                                </a>
+                            ))}
+                        </div>
                     </div>
-                    <div className="relative grid grid-cols-1 gap-12 lg:grid-cols-4">
-                        {/* Logo & App */}
-                        <div className="justify-self-center">
-                            <FooterLogo />
-                            {/* <div className="mt-8 w-auto">
-                                <PWAInstallPrompt />
-                            </div> */}
-                        </div>
 
-                        {/* Company Info */}
-                        <div className="lg:justify-self-center">
-                            <div className="mb-4 text-xl font-bold">
-                                {t('Information')} <Separator className="w-auto bg-white" />
-                            </div>
-                            <ul className="flex flex-col gap-3">
-                                {website_info?.address && (
-                                    <li className="flex gap-2">
-                                        <span className="mt-0.5">
-                                            <MapPinIcon size={18} className="size-5" />
-                                        </span>
-                                        <span>
-                                            {currentLocale === 'kh' ? website_info?.address_kh || website_info?.address : website_info?.address}
-                                        </span>
-                                    </li>
-                                )}
-                                {website_info?.phone && (
-                                    <li className="flex gap-2">
-                                        <span className="mt-0.5">
-                                            <PhoneIcon size={18} className="size-5" />
-                                        </span>
-                                        <a className="hover:underline" href={`tel:${website_info.phone}`}>
-                                            {website_info.phone}
-                                        </a>
-                                    </li>
-                                )}
-                                {website_info?.email && (
-                                    <li className="flex gap-2">
-                                        <span className="mt-0.5">
-                                            <MailIcon size={18} className="size-5" />
-                                        </span>
-                                        <a className="hover:underline" href={`mailto:${website_info.email}`}>
-                                            {website_info.email}
-                                        </a>
-                                    </li>
-                                )}
-                            </ul>
-                        </div>
+                    {/* Quick Links & Tools */}
+                    <div>
+                        <h4 className="mb-6 text-lg font-semibold text-white">{t('Quick Links')}</h4>
+                        <ul className="space-y-3">
+                            {quickLinks.map((link, idx) => (
+                                <li key={idx}>
+                                    <Link
+                                        href={link.href}
+                                        className={`group flex items-center transition-colors ${isActive(link.href) ? 'text-yellow-400' : `text-gray-400 ${link.color}`}`}
+                                    >
+                                        <span
+                                            className={`mr-2 h-1.5 w-1.5 rounded-full transition-opacity ${link.dot} ${isActive(link.href) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+                                        ></span>
+                                        {link.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
 
-                        {/* Quick Links */}
-                        <div className="lg:justify-self-center">
-                            <div className="mb-4 text-xl font-bold">
-                                {t('Quick Links')} <Separator className="w-auto bg-white" />
-                            </div>
-                            <ul className="space-y-2">
-                                {defaultItems.map((item, idx) => (
-                                    <li key={idx}>
-                                        <Link
-                                            prefetch
-                                            href={item.href}
-                                            className={`flex items-center gap-2 rounded px-2 py-1 transition-colors ${isActive(item.href) ? 'font-semibold text-white underline underline-offset-4' : 'text-white'} hover:underline`}
-                                        >
-                                            {item.icon}
-                                            {item.label}
-                                        </Link>
-                                    </li>
-                                ))}
-                                {tools?.length > 0 && (
-                                    <div className="my-4 text-xl font-bold">
-                                        {t('Our Tools')} <Separator className="w-auto bg-white" />
-                                    </div>
-                                )}
-                                {tools.map((item, idx) => (
-                                    <li key={idx}>
-                                        <Link
-                                            prefetch
-                                            href={item.href}
-                                            className={`flex items-center gap-2 rounded px-2 py-1 transition-colors ${isActive(item.href) ? 'font-semibold text-white underline underline-offset-4' : 'text-white'} hover:underline`}
-                                        >
-                                            {item.icon}
-                                            {item.label}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        {/* Social Media */}
-                        <div className="lg:justify-self-center">
-                            <div className="mb-4 text-xl font-bold">
-                                {t('Social Media')} <Separator className="w-auto bg-white" />
-                            </div>
-                            <ul className="space-y-3">
-                                {media_links?.length > 0 &&
-                                    media_links?.map((item: any) => (
-                                        <li key={item.id}>
-                                            <a target="_blank" href={item.link} className="flex items-center gap-2 hover:underline">
-                                                <img className="size-8" src={`/assets/images/links/thumb/${item.image}`} alt="" />
-                                                {currentLocale === 'kh' ? item?.name_kh || item?.name : item?.name}
-                                            </a>
+                        {tools?.length > 0 && (
+                            <div className="mt-8">
+                                <h4 className="mb-4 text-sm font-semibold tracking-wider text-gray-500 uppercase">{t('Our Tools')}</h4>
+                                <ul className="space-y-2">
+                                    {tools?.map((tool, idx) => (
+                                        <li key={idx}>
+                                            <Link
+                                                href={tool.href}
+                                                className="flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-white"
+                                            >
+                                                {tool.icon} {tool.label}
+                                            </Link>
                                         </li>
                                     ))}
-                            </ul>
-                            <div className="mt-8 w-auto">
-                                <PWAInstallPrompt />
+                                </ul>
                             </div>
+                        )}
+                    </div>
+
+                    {/* Contact Info */}
+                    <div>
+                        <h4 className="mb-6 text-lg font-semibold text-white">{t('Get in Touch')}</h4>
+                        <ul className="space-y-4">
+                            {website_info?.email && (
+                                <li className="flex items-start">
+                                    <div className="mr-3 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-yellow-500">
+                                        <MailIcon className="h-5 w-5 text-gray-900" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-400">{t('Email')}</p>
+                                        <a href={`mailto:${website_info.email}`} className="text-white transition-colors hover:text-indigo-400">
+                                            {website_info.email}
+                                        </a>
+                                    </div>
+                                </li>
+                            )}
+                            {website_info?.phone && (
+                                <li className="flex items-start">
+                                    <div className="mr-3 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-green-600">
+                                        <PhoneIcon className="h-5 w-5 text-white" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-400">{t('Phone')}</p>
+                                        <a href={`tel:${website_info.phone}`} className="text-white transition-colors hover:text-indigo-400">
+                                            {website_info.phone}
+                                        </a>
+                                    </div>
+                                </li>
+                            )}
+                        </ul>
+                        <div className="mt-6">
+                            <SwitchDarkMode3D />
                         </div>
                     </div>
                 </div>
 
                 {/* Footer Bottom */}
-                <div className="relative z-10 mx-auto max-w-7xl sm:pb-0">
-                    <div className="flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
-                        <p
-                            className="text-center text-sm"
-                            dangerouslySetInnerHTML={{
-                                __html: currentLocale === 'kh' ? website_info?.copyright_kh || website_info?.copyright : website_info?.copyright,
-                            }}
-                        />
-                        {/* <Link prefetch href={`/our-staffs`} className="text-sm">
-                            {t('Deverloped By')} : <b className="underline-offset-4 hover:underline">{t('E-Library Staff')}</b>
-                        </Link> */}
+                <div className="border-t border-gray-700 pt-8">
+                    <div className="flex flex-col items-center justify-between space-y-4 md:flex-row md:space-y-0">
+                        <div className="flex flex-col items-center space-y-2 md:flex-row md:space-y-0 md:space-x-4">
+                            <p
+                                className="text-sm text-gray-400"
+                                dangerouslySetInnerHTML={{
+                                    __html: currentLocale === 'kh' ? website_info?.copyright_kh || website_info?.copyright : website_info?.copyright,
+                                }}
+                            />
+                            <p className="text-sm text-gray-500">
+                                {t('Powered By')}:{' '}
+                                <a href="https://www.alphalib.org" target="_blank" className="font-semibold text-yellow-400 hover:text-yellow-300">
+                                    Alphalib
+                                </a>
+                            </p>
+                        </div>
+                        <div className="flex gap-6 text-sm">
+                            <Link href="/privacy-policy" className="text-gray-400 transition-colors hover:text-green-400">
+                                {t('Privacy Policy')}
+                            </Link>
+                            <Link href="/terms-of-service" className="text-gray-400 transition-colors hover:text-yellow-400">
+                                {t('Terms of Service')}
+                            </Link>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="absolute top-4 right-4 z-10">
-                <SwitchDarkMode3D />
             </div>
         </footer>
     );

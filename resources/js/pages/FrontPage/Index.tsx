@@ -2,9 +2,9 @@ import SpaceAnimateButton from '@/components/Button/SpaceAnimateButton';
 import { ContentHeader } from '@/components/Header/ContentHeader';
 import Feature2 from '@/components/Section/Feature2';
 import { Feature3 } from '@/components/Section/Feature3';
-import Feature6 from '@/components/Section/Feature6';
 import Hero from '@/components/Section/Hero';
-import PostsHomePageSection from '@/components/Section/PostsHomePageSection';
+import HeroFooter from '@/components/Section/HeroFooter';
+import LibraryCards from '@/components/Section/LibraryCards';
 import useTranslation from '@/hooks/use-translation';
 import FrontPageLayout from '@/layouts/FrontPageLayout';
 import { Head, Link, usePage } from '@inertiajs/react';
@@ -44,48 +44,18 @@ const Index = () => {
             {/* Search bar */}
             <Hero />
 
-            {/* Posts Section */}
-            <PostsHomePageSection />
+            <LibraryCards />
 
             {/* Resources Hightligh */}
             <Feature2 />
-
-            {/* Theses Major */}
-            <div className="section-container mt-20">
-                <ContentHeader title={t('Thesis by Major')} description={t('Browse all theses, organized by major.')} />
-
-                <Feature3 data={thesisCategories} />
-            </div>
-
-            <div className="section-container mt-20">
-                <ContentHeader title={t('Publications by Categories')} description={t('Browse all publications, organized by category.')} />
-
-                <Feature3 data={publicationCategories} />
-            </div>
-
-            {/* Libraries Statistics */}
-            <div className="section-container mt-40">
-                <ContentHeader
-                    title={t('Library Overview')}
-                    description={t('A quick look at how our library is being used — from online reads to in-person visits.')}
-                />
-
-                <Feature6 />
-            </div>
-
-            {/* What We Offer */}
-            {/* <Feature1 /> */}
-
-            {/* Accordion */}
-            {/* <div className="section-container mt-20">
-                <Accordion1 />
-            </div> */}
 
             <div className="section-container my-20 flex justify-center">
                 <Link href={`/resources`}>
                     <SpaceAnimateButton title={t('See All Resources')} />
                 </Link>
             </div>
+
+            <HeroFooter />
         </FrontPageLayout>
     );
 };

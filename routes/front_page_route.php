@@ -7,8 +7,8 @@ use App\Models\Item;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-// Route::get('/', [FrontPageController::class, 'index'])->name('home');
-Route::get('/', [ResourceController::class, 'index'])->name('home');
+Route::get('/', [FrontPageController::class, 'index'])->name('home');
+// Route::get('/', [ResourceController::class, 'index'])->name('home');
 
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{post}', [PostController::class, 'show']);
@@ -33,6 +33,15 @@ Route::get('/student-checkin', function () {
 
 Route::get('/about', function () {
     return Inertia::render('FrontPage/About/Index');
+});
+Route::get('/support', function () {
+    return Inertia::render('FrontPage/Support/Index');
+});
+Route::get('/pricing', function () {
+    return Inertia::render('FrontPage/Pricing/Index');
+});
+Route::get('/products', function () {
+    return Inertia::render('FrontPage/Products/Index');
 });
 
 Route::get('/our-journey', function () {
