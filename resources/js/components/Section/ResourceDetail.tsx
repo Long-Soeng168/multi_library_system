@@ -1,9 +1,11 @@
 import useTranslation from '@/hooks/use-translation';
 import { cn } from '@/lib/utils';
 import { Link, usePage } from '@inertiajs/react';
+import { ExternalLinkIcon } from 'lucide-react';
 import DownloadButton from '../Button/DownloadButton';
 import ReadButton from '../Button/ReadButton';
 import BookImagesGallery from '../GalleryViewer/BookImagesGallery';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 const ResourceDetail = ({
     imageContainerClassname,
@@ -71,7 +73,7 @@ const ResourceDetail = ({
                                     showData?.authors?.map((author: any, index: number) => (
                                         <span className="flex items-center" key={author?.id}>
                                             <Link
-                                                href={`/resources/${mainCategory?.code}?author_id=${author?.id || ''}`}
+                                                href={`/libraries/${showData?.library?.id}?author_id=${author?.id || ''}`}
                                                 className="line-clamp-2 cursor-pointer text-primary underline-offset-4 hover:underline"
                                             >
                                                 {currentLocale == 'kh' ? (author?.name_kh ?? author?.name) : author?.name}
@@ -96,7 +98,7 @@ const ResourceDetail = ({
                         <div className="flex items-center justify-start gap-4 pb-1">
                             <span className="w-[120px] shrink-0 border-r">{t('Advisor')}</span>
                             <Link
-                                href={`/resources/${mainCategory?.code}?advisor_id=${showData?.advisor?.id || ''}`}
+                                href={`/libraries/${showData?.library?.id}?advisor_id=${showData?.advisor?.id || ''}`}
                                 className="line-clamp-2 cursor-pointer text-primary underline-offset-4 hover:underline"
                             >
                                 {currentLocale == 'kh' ? (showData?.advisor?.name_kh ?? showData?.advisor?.name) : showData?.advisor?.name}
@@ -111,7 +113,7 @@ const ResourceDetail = ({
                                 {showData?.category?.parent && (
                                     <>
                                         <Link
-                                            href={`/resources/${mainCategory?.code}?category_code=${showData?.category?.parent?.code || ''}`}
+                                            href={`/libraries/${showData?.library?.id}?category_code=${showData?.category?.parent?.code || ''}`}
                                             className="line-clamp-2 cursor-pointer text-primary underline-offset-4 hover:underline"
                                         >
                                             {currentLocale == 'kh'
@@ -122,7 +124,7 @@ const ResourceDetail = ({
                                     </>
                                 )}
                                 <Link
-                                    href={`/resources/${mainCategory?.code}?category_code=${showData?.category?.code || ''}`}
+                                    href={`/libraries/${showData?.library?.id}?category_code=${showData?.category?.code || ''}`}
                                     className="line-clamp-2 cursor-pointer text-primary underline-offset-4 hover:underline"
                                 >
                                     {currentLocale == 'kh' ? (showData?.category?.name_kh ?? showData?.category?.name) : showData?.category?.name}
@@ -135,7 +137,7 @@ const ResourceDetail = ({
                         <div className="flex items-center justify-start gap-4 pb-1">
                             <span className="w-[120px] shrink-0 border-r">{t('Publisher')}</span>
                             <Link
-                                href={`/resources/${mainCategory?.code}?publisher_id=${showData?.publisher?.id || ''}`}
+                                href={`/libraries/${showData?.library?.id}?publisher_id=${showData?.publisher?.id || ''}`}
                                 className="line-clamp-2 cursor-pointer text-primary underline-offset-4 hover:underline"
                             >
                                 {currentLocale == 'kh' ? (showData?.publisher?.name_kh ?? showData?.publisher?.name) : showData?.publisher?.name}
@@ -147,7 +149,7 @@ const ResourceDetail = ({
                         <div className="flex items-center justify-start gap-4 pb-1">
                             <span className="w-[120px] shrink-0 border-r">{t('Language')}</span>
                             <Link
-                                href={`/resources/${mainCategory?.code}?category_code=${showData?.category?.code || ''}&language_code=${showData?.language?.code || ''}`}
+                                href={`/libraries/${showData?.library?.id}?category_code=${showData?.category?.code || ''}&language_code=${showData?.language?.code || ''}`}
                                 className="line-clamp-2 cursor-pointer text-primary underline-offset-4 hover:underline"
                             >
                                 {currentLocale == 'kh' ? (showData?.language?.name_kh ?? showData?.language?.name) : showData?.language?.name}
@@ -158,7 +160,7 @@ const ResourceDetail = ({
                         <div className="flex items-center justify-start gap-4 pb-1">
                             <span className="w-[120px] shrink-0 border-r">{t('Year')}</span>
                             <Link
-                                href={`/resources/${mainCategory?.code}?category_code=${showData?.category?.code || ''}&from_year=${showData?.published_year || ''}`}
+                                href={`/libraries/${showData?.library?.id}?category_code=${showData?.category?.code || ''}&from_year=${showData?.published_year || ''}`}
                                 className="line-clamp-2 cursor-pointer text-primary underline-offset-4 hover:underline"
                             >
                                 {showData?.published_year}
@@ -173,6 +175,42 @@ const ResourceDetail = ({
                         </div>
                     )}
                 </div>
+                {showData?.library?.id && (
+                    <div className="group relative mt-6">
+                        <Link
+                            href={`/libraries/${showData.library.id}`}
+                            className="flex items-center gap-3 rounded-lg border border-border/50 bg-muted/20 p-2 transition-all duration-300 hover:bg-muted/50 hover:shadow-sm"
+                        >
+                            {/* 1. Mini Avatar */}
+                            <div className="relative shrink-0">
+                                <Avatar className="h-12 w-12 rounded-sm border-2 border-background shadow-sm">
+                                    <AvatarImage
+                                        src={showData.library?.image ? `/assets/images/libraries/${showData.library.image}` : ''}
+                                        className="object-cover"
+                                    />
+                                    <AvatarFallback className="bg-primary/10 text-xs font-bold text-primary">
+                                        {showData.library?.name?.charAt(0)}
+                                    </AvatarFallback>
+                                </Avatar>
+                            </div>
+
+                            {/* 2. Text Info */}
+                            <div className="flex min-w-0 flex-col">
+                                <span className="mb-1 text-[10px] leading-none font-medium text-muted-foreground/70">{t('Posted by')}</span>
+                                <h4 className="truncate text-sm font-bold text-foreground transition-colors group-hover:text-primary">
+                                    {currentLocale === 'kh' ? showData.library.name_kh || showData.library.name : showData.library.name}
+                                </h4>
+                            </div>
+
+                            {/* 3. Interaction Hint */}
+                            <div className="ml-auto pr-1">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border/50 bg-background opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100">
+                                    <ExternalLinkIcon size={18} className="text-primary" />
+                                </div>
+                            </div>
+                        </Link>
+                    </div>
+                )}
                 {showData?.long_description && (
                     <div className="mt-10">
                         <h3 className="text-lg font-semibold">{t('Description')}</h3>

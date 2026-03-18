@@ -13,8 +13,11 @@ Route::get('/', [FrontPageController::class, 'index'])->name('home');
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{post}', [PostController::class, 'show']);
 
-Route::get('/resources', [ResourceController::class, 'index']); //e.g: /resources/theses, /resources/publicaitons
+// Route::get('/resources', [ResourceController::class, 'index']); //e.g: /resources/theses, /resources/publicaitons
 Route::get('/resources/{main_category_code}', [ResourceController::class, 'main_category']); //e.g: /resources/theses, /resources/publicaitons
+Route::get('/resources', [ResourceController::class, 'libraries']); //e.g: /resources/theses, /resources/publicaitons
+Route::get('/libraries', [ResourceController::class, 'libraries']); //e.g: /resources/theses, /resources/publicaitons
+Route::get('/libraries/{library_id}', [ResourceController::class, 'library_show']); //e.g: /resources/theses, /resources/publicaitons
 Route::get('/resources/detail/{id}', [ResourceController::class, 'item_show']); //e.g: /resources/theses, /resources/publicaitons
 Route::get('/theses/{id}', [ResourceController::class, 'item_show']); //e.g: /resources/theses, /resources/publicaitons
 

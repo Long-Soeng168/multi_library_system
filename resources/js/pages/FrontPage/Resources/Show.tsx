@@ -49,12 +49,24 @@ const Show = () => {
                             <BreadcrumbItem>
                                 <BreadcrumbLink href="/resources">{t('Resources')}</BreadcrumbLink>
                             </BreadcrumbItem>
-                            {mainCategory?.name && (
+                            {/* {mainCategory?.name && (
                                 <>
                                     <BreadcrumbSeparator />
                                     <BreadcrumbItem>
-                                        <BreadcrumbLink href={`/resources/${mainCategory?.code}`}>
+                                        <BreadcrumbLink href={`/libraries/${showData?.library?.id}`}>
                                             {currentLocale == 'kh' ? (mainCategory.name_kh ?? mainCategory.name) : mainCategory?.name}
+                                        </BreadcrumbLink>
+                                    </BreadcrumbItem>
+                                </>
+                            )} */}
+                            {showData?.library?.id && (
+                                <>
+                                    <BreadcrumbSeparator />
+                                    <BreadcrumbItem>
+                                        <BreadcrumbLink href={`/libraries/${showData?.library?.id} || ''}`}>
+                                            {currentLocale == 'kh'
+                                                ? (showData?.library?.name_kh ?? showData?.library?.name)
+                                                : showData?.library?.name}
                                         </BreadcrumbLink>
                                     </BreadcrumbItem>
                                 </>
@@ -64,7 +76,7 @@ const Show = () => {
                                     <BreadcrumbSeparator />
                                     <BreadcrumbItem>
                                         <BreadcrumbLink
-                                            href={`/resources/${mainCategory?.code}?category_code=${showData?.category?.parent?.code || ''}`}
+                                            href={`/libraries/${showData?.library?.id}?category_code=${showData?.category?.parent?.code || ''}`}
                                         >
                                             {currentLocale == 'kh'
                                                 ? (showData?.category?.parent.name_kh ?? showData?.category?.parent.name)
@@ -77,7 +89,7 @@ const Show = () => {
                                 <>
                                     <BreadcrumbSeparator />
                                     <BreadcrumbItem>
-                                        <BreadcrumbLink href={`/resources/${mainCategory?.code}?category_code=${showData?.category?.code || ''}`}>
+                                        <BreadcrumbLink href={`/libraries/${showData?.library?.id}?category_code=${showData?.category?.code || ''}`}>
                                             {currentLocale == 'kh'
                                                 ? (showData?.category?.name_kh ?? showData?.category?.name)
                                                 : showData?.category?.name}
@@ -102,7 +114,6 @@ const Show = () => {
                         </BreadcrumbList>
                     </Breadcrumb>
                 </div>
-
                 <div>
                     <ResourceDetail />
                     <ItemPhysicalCopyFrontDisplay />

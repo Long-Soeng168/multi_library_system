@@ -8,7 +8,7 @@ import { useState } from 'react';
 import ByYearDialog from '../Dialog/ByYearDialog';
 
 export default function ResourceSidebar() {
-    const { categories, authors, publishers, advisors, languages, mainCategory } = usePage<any>().props;
+    const { categories, libraries, authors, publishers, advisors, languages } = usePage<any>().props;
 
     const { t, currentLocale } = useTranslation();
 
@@ -16,6 +16,7 @@ export default function ResourceSidebar() {
     const initialQueryParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
 
     const [filters, setFilters] = useState({
+        library_id: initialQueryParams.get('library_id') || '',
         category_code: initialQueryParams.get('category_code') || '',
         grade_code: initialQueryParams.get('grade_code') || '',
         author_id: initialQueryParams.get('author_id') || '',
@@ -53,6 +54,7 @@ export default function ResourceSidebar() {
     const resetFilter = () => {
         // 1. Reset local state immediately for UI responsiveness
         setFilters({
+            library_id: '',
             category_code: '',
             grade_code: '',
             author_id: '',
@@ -75,17 +77,33 @@ export default function ResourceSidebar() {
         <>
             <Accordion
                 type="multiple"
-                defaultValue={['categories', 'authors', 'publishers', 'advisors', 'languages', 'publishedYears']}
+                defaultValue={['libraries', 'categories', 'authors', 'publishers', 'advisors', 'languages', 'publishedYears']}
                 className={cn(
                     'w-full rounded-lg border px-4',
                     Object.values(filters).some((val) => !!val) && 'border-primary ring-4 ring-primary/20',
                 )}
             >
+                {libraries?.length > 0 && (
+                    <AccordionItem value="libraries" key="libraries">
+                        <AccordionTrigger className="font-semibold">{t('Libraries')}</AccordionTrigger>
+                        <AccordionContent>
+                            <LibrarySidebarList
+                                limit={20}
+                                heading={t('All Libraries')}
+                                value={filters.library_id}
+                                // key={filters.library_id}
+                                onChange={(val) => updateFilters({ library_id: val })}
+                                options={libraries.map((item: any) => ({
+                                    value: item.id,
+                                    label: currentLocale === 'kh' ? (item.name_kh ?? item.name) : item.name,
+                                }))}
+                            />
+                        </AccordionContent>
+                    </AccordionItem>
+                )}
                 {categories?.length > 0 && (
                     <AccordionItem value="categories" key="categories">
-                        <AccordionTrigger className="font-semibold">
-                            {mainCategory?.code == 'theses' ? t('Bachelor') : t('Categories')}
-                        </AccordionTrigger>
+                        <AccordionTrigger className="font-semibold">{t('Categories')}</AccordionTrigger>
                         <AccordionContent>
                             <LibrarySidebarList
                                 limit={20}
@@ -96,7 +114,7 @@ export default function ResourceSidebar() {
                                 options={categories.map((item: any) => ({
                                     value: item.code,
                                     label: currentLocale === 'kh' ? (item.name_kh ?? item.name) : item.name,
-                                    children: item.children,
+                                    children: item?.children,
                                 }))}
                             />
                         </AccordionContent>
