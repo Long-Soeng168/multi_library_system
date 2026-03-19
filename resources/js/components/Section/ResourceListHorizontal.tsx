@@ -29,7 +29,7 @@ const ResourceListHorizontal = ({ className }: { className?: string }) => {
                         <Link
                             href={`/resources/detail/${item?.id}`}
                             key={item.id}
-                            className="group flex flex-row gap-4 border-b bg-background p-4 transition-all duration-300 hover:bg-slate-50/50 hover:shadow-md sm:flex-row sm:gap-6 sm:p-6 md:hover:-translate-y-1 dark:border-slate-800 dark:hover:bg-slate-900/60 dark:hover:shadow-black/30"
+                            className="group flex flex-row gap-4 rounded border-b bg-background p-4 transition-all duration-300 hover:shadow hover:outline sm:flex-row sm:gap-6 sm:p-6 md:hover:-translate-y-1 dark:border-slate-800 dark:hover:bg-slate-900 dark:hover:shadow-black/30"
                         >
                             {/* Left: Thumbnail with Compact Avatar Design */}
                             <div className="aspect-[3/4] h-[170.6px] w-32 shrink-0 overflow-hidden rounded">
@@ -117,7 +117,7 @@ const ResourceListHorizontal = ({ className }: { className?: string }) => {
                                     {item?.library?.id && (
                                         <Link
                                             href={`/libraries/${item?.library?.id}`}
-                                            className="group/library inline-flex items-center gap-2 rounded-full border border-border/50 bg-muted/30 px-3 py-1 transition-all hover:border-primary/30 hover:bg-muted"
+                                            className="group/library mr-2 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-muted/30 px-3 py-1 transition-all hover:border-primary/30 hover:bg-muted"
                                         >
                                             <div className="flex items-center gap-2 text-[13px] leading-none">
                                                 <span className="text-muted-foreground/80">{t('Posted by')}</span>
@@ -136,6 +136,19 @@ const ResourceListHorizontal = ({ className }: { className?: string }) => {
                                                 />
                                             </div>
                                         </Link>
+                                    )}
+                                    {item?.file_name && (
+                                        <span className="group/file inline-flex items-center gap-2 rounded-full border border-primary/20 bg-muted/40 px-2 py-1 transition-all hover:border-primary/30 hover:bg-muted dark:bg-muted/20">
+                                            {/* Minimalist Extension Text */}
+                                            <div className="flex items-center gap-1 text-[11px] font-black tracking-widest text-foreground/80 uppercase group-hover/file:text-primary">
+                                                <span className="relative flex h-2 w-2">
+                                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-30"></span>
+                                                    <span className="relative inline-flex h-2 w-2 rounded-full bg-primary/60"></span>
+                                                </span>
+
+                                                {item.file_name.split('.').pop() || 'FILE'}
+                                            </div>
+                                        </span>
                                     )}
                                 </div>
 

@@ -31,6 +31,7 @@ const BooksCarousel = ({ items, mainCategoryCode }: { items: any[]; mainCategory
                             <div className="h-full p-1">
                                 <Link href={`/resources/detail/${item.id}`}>
                                     <BookCardHoverGradient
+                                        library_name={item?.library?.name}
                                         title={item.name_kh ?? item.name}
                                         subTitle={item.name_kh ? item.name : ''}
                                         image_url={`/assets/images/items/thumb/${item.thumbnail}`}

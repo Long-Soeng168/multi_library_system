@@ -10,6 +10,7 @@ import FormRadioStatus from '@/components/Input/FormRadioStatus';
 import { ProgressWithValue } from '@/components/ProgressBar/progress-with-value';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LIBRARY_STATUS_OPTIONS } from '@/data/status-data';
+import usePermission from '@/hooks/use-permission';
 import useTranslation from '@/hooks/use-translation';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
@@ -20,6 +21,7 @@ import { useState } from 'react';
 interface TypeForm {
     name: string;
     name_kh?: string;
+    external_link?: string;
     order_index?: string;
     short_description?: string;
     short_description_kh?: string;
@@ -50,6 +52,7 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
     const { data, setData, post, processing, transform, progress, errors, reset } = useForm<TypeForm>({
         name: editData?.name || '',
         name_kh: editData?.name_kh || '',
+        external_link: editData?.external_link || '',
         order_index: editData?.order_index || 100,
         short_description: editData?.short_description || '',
         short_description_kh: editData?.short_description_kh || '',
@@ -96,7 +99,7 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
     ];
 
     const { t, currentLocale } = useTranslation();
-
+    const hasPermission = usePermission();
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <form onSubmit={onSubmit} className="form">
@@ -162,7 +165,7 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
                                     onChange={(val) => setData('owner_id', val)}
                                     error={errors.owner_id}
                                 />
-                                {editData?.owner_id && (editData?.owner_id != data.owner_id) && (
+                                {editData?.owner_id && editData?.owner_id != data.owner_id && (
                                     <div className="mt-2 flex items-start gap-3 rounded border border-yellow-200 bg-yellow-50 p-3 text-sm text-yellow-800 dark:border-yellow-900/50 dark:bg-yellow-900/20 dark:text-yellow-500">
                                         {/* Lucide AlertTriangle Icon */}
                                         <AlertTriangle className="h-5 w-5 shrink-0 text-yellow-600 dark:text-yellow-500" />
@@ -190,7 +193,30 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
                                 error={errors.name}
                                 containerClassName="col-span-2"
                             />
-
+                            {hasPermission('item create') && (
+                                <>
+                                    <FormField
+                                        id="external_link"
+                                        name="external_link"
+                                        label="External Link"
+                                        value={data.external_link}
+                                        onChange={(val) => setData('external_link', val)}
+                                        error={errors.external_link}
+                                        description="For Library use as Link only."
+                                    />
+                                    <FormField
+                                        required
+                                        type="number"
+                                        id="order_index"
+                                        name="order_index"
+                                        label="Order Index"
+                                        value={data.order_index}
+                                        onChange={(val) => setData('order_index', val)}
+                                        error={errors.order_index}
+                                        description="Lower number has higher priority."
+                                    />
+                                </>
+                            )}
                             <FormFieldTextArea
                                 id="short_description"
                                 name="short_description"
@@ -199,18 +225,6 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
                                 onChange={(val) => setData('short_description', val)}
                                 error={errors.short_description}
                                 containerClassName="col-span-2"
-                            />
-
-                            <FormField
-                                required
-                                type="number"
-                                id="order_index"
-                                name="order_index"
-                                label="Order Index"
-                                value={data.order_index}
-                                onChange={(val) => setData('order_index', val)}
-                                error={errors.order_index}
-                                description="Lower number has higher priority."
                             />
 
                             <div className="col-span-2 grid gap-6 md:grid-cols-2">

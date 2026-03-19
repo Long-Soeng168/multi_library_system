@@ -1,6 +1,6 @@
 import { Facebook, Link2, Mail, Send } from 'lucide-react';
 import React from 'react';
-import { toast } from 'sonner';
+import { toast, Toaster } from 'sonner';
 
 // Shadcn UI Tooltip Components
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -90,6 +90,7 @@ const SocialShareButtons = ({
                     </IconWrapper>
                 </div>
             </div>
+            <Toaster />
         </TooltipProvider>
     );
 };

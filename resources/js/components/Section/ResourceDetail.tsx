@@ -174,6 +174,24 @@ const ResourceDetail = ({
                             <span>{showData?.total_page}</span>
                         </div>
                     )}
+                    {showData?.ddc && (
+                        <div className="flex items-center justify-start gap-4 pb-1">
+                            <span className="w-[120px] shrink-0 border-r">{t('DDC')}</span>
+                            <span>{showData?.ddc}</span>
+                        </div>
+                    )}
+                    {showData?.edition && (
+                        <div className="flex items-center justify-start gap-4 pb-1">
+                            <span className="w-[120px] shrink-0 border-r">{t('Edition')}</span>
+                            <span>{showData?.edition}</span>
+                        </div>
+                    )}
+                    {showData?.isbn && (
+                        <div className="flex items-center justify-start gap-4 pb-1">
+                            <span className="w-[120px] shrink-0 border-r">{t('ISBN')}</span>
+                            <span>{showData?.isbn}</span>
+                        </div>
+                    )}
                 </div>
                 {showData?.library?.id && (
                     <div className="group relative mt-6">

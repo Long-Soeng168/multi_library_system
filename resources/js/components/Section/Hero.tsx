@@ -8,7 +8,7 @@ const Hero = () => {
 
     return (
         <section className="relative flex flex-col overflow-x-hidden bg-background py-16 text-foreground transition-colors duration-300 dark:bg-gray-950">
-            <div className="section-container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="section-container ">
                 <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
                     {/* Text Content */}
                     <div className="order-2 lg:order-1">
@@ -33,7 +33,7 @@ const Hero = () => {
                                 {t('Get Started')}
                             </Link>
                             <Link
-                                href="/support"
+                                href="/contact"
                                 className="w-full rounded-lg border border-gray-300 bg-white px-8 py-4 text-center font-semibold text-gray-700 shadow-md transition-all hover:bg-gray-50 sm:w-auto dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
                             >
                                 {t('Demo')}

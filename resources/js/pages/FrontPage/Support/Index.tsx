@@ -54,7 +54,7 @@ const Index = () => {
                             {services.map((service, idx) => (
                                 <Link
                                     key={idx}
-                                    href={service.href}
+                                    href={"#"}
                                     className="group flex flex-col rounded-xl border border-gray-100 bg-white p-8 shadow-md transition-all hover:-translate-y-1 hover:border-transparent hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 dark:shadow-none dark:hover:border-gray-700"
                                 >
                                     <div className={`mb-6 flex h-16 w-16 items-center justify-center rounded-lg ${service.bgColor}`}>
@@ -76,9 +76,9 @@ const Index = () => {
                                         ))}
                                     </ul>
 
-                                    <div className="mt-8 flex items-center text-sm font-bold text-blue-600 opacity-0 transition-opacity group-hover:opacity-100 dark:text-blue-400">
+                                    {/* <div className="mt-8 flex items-center text-sm font-bold text-blue-600 opacity-0 transition-opacity group-hover:opacity-100 dark:text-blue-400">
                                         {t('Learn more')} <ArrowRight className="ml-2 h-4 w-4" />
-                                    </div>
+                                    </div> */}
                                 </Link>
                             ))}
                         </div>

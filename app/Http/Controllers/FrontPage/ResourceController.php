@@ -483,24 +483,34 @@ class ResourceController extends Controller
             return $query->paginate($perPage)->onEachSide(2);
         });
 
-        // 3. Authors, Publishers, and Advisors (Showing all since no specific main category)
-        $authors = Cache::flexible("authors_global", [3600, 7200], function () {
+        // Define the dynamic part once
+        $library_suffix = $library_id ? md5(json_encode($library_id)) : 'global';
+
+        // 1. Authors Key
+        $authorsKey = "authors_" . $library_suffix;
+        $authors = Cache::flexible($authorsKey, [3600, 7200], function () use ($library_id) {
             return User::role('Author')
-                ->orderByDesc('author_items_count')
-                ->select('id', 'name', 'name_kh', 'title_type_code')
+                ->when($library_id, fn($q) => $q->where('library_id', $library_id))
+                ->select('id', 'name', 'name_kh', 'title_type_code', 'library_id')
                 ->withCount('author_items')
-                ->having('author_items_count', '>', 0)
+                // ->having('author_items_count', '>', 0)
+                ->orderByDesc('author_items_count')
                 ->get();
         });
 
-        $publishers = Cache::flexible("publishers_global", [3600, 7200], function () {
+        // 2. Publishers Key (Must be different from Authors Key)
+        $publishersKey = "publishers_" . $library_suffix;
+        $publishers = Cache::flexible($publishersKey, [3600, 7200], function () use ($library_id) {
             return User::role('Publisher')
-                ->orderByDesc('publisher_items_count')
-                ->select('id', 'name', 'name_kh', 'title_type_code')
+                ->when($library_id, fn($q) => $q->where('library_id', $library_id))
+                ->select('id', 'name', 'name_kh', 'title_type_code', 'library_id')
                 ->withCount('publisher_items')
-                ->having('publisher_items_count', '>', 0)
+                // ->having('publisher_items_count', '>', 0)
+                ->orderByDesc('publisher_items_count')
                 ->get();
         });
+
+        // return $authors;
 
         $languages = Cache::flexible("languages_global", [3600, 7200], function () {
             return Language::select('id', 'code', 'name', 'name_kh', 'image')
@@ -510,7 +520,7 @@ class ResourceController extends Controller
                 ->get();
         });
         $libraries = Cache::flexible("libraries_global", [3600, 7200], function () {
-            return Library::orderBy('order_index')->get();
+            return Library::whereNull('external_link')->orderBy('order_index')->get();
         });
 
         // return $tableData;
@@ -568,6 +578,7 @@ class ResourceController extends Controller
 
             // $query->select('id', 'name', 'name_kh', 'short_description', 'short_description_kh', 'thumbnail', 'category_code', 'library_id', 'created_at');
             $query->with(
+                'library',
                 'publisher',
                 'authors',
                 'advisor',
@@ -681,57 +692,32 @@ class ResourceController extends Controller
                 ->get();
         });
 
-        $publishers = null;
-        $authors = null;
+        // Define the dynamic part once
+        $library_suffix = $library_id ? md5(json_encode($library_id)) : 'global';
 
-        if ($library_id !== 'theses') {
-            $authors = Cache::flexible("authors_{$library_id}", [3600, 7200], function () use ($library_id) {
-                if ($library_id === 'theses') return null;
-                return User::role('Author')
-                    ->orderByDesc('author_items_count')
-                    ->orderBy('name')
-                    ->select('id', 'name', 'name_kh', 'title_type_code')
-                    ->withCount([
-                        'author_items' => fn($q) =>
-                        $q->where('library_id', $library_id),
-                    ])
-                    ->having('author_items_count', '>', 0)
-                    ->get();
-            });
+        // 1. Authors Key
+        $authorsKey = "authors_" . $library_suffix;
+        $authors = Cache::flexible($authorsKey, [3600, 7200], function () use ($library_id) {
+            return User::role('Author')
+                ->when($library_id, fn($q) => $q->where('library_id', $library_id))
+                ->select('id', 'name', 'name_kh', 'title_type_code', 'library_id')
+                ->withCount('author_items')
+                // ->having('author_items_count', '>', 0)
+                ->orderByDesc('author_items_count')
+                ->get();
+        });
 
-            $publishers = Cache::flexible("publishers_{$library_id}", [3600, 7200], function () use ($library_id) {
-                if ($library_id === 'theses') return null;
-                return User::role('Publisher')
-                    ->orderByDesc('publisher_items_count')
-                    ->orderBy('name')
-                    ->select('id', 'name', 'name_kh', 'title_type_code')
-                    ->withCount([
-                        'publisher_items' => fn($q) =>
-                        $q->where('library_id', $library_id),
-                    ])
-                    ->having('publisher_items_count', '>', 0)
-                    ->get();
-            });
-        }
-
-
-        $advisors = null;
-        if ($library_id === 'theses') {
-
-            $advisors = Cache::flexible("advisors_{$library_id}", [3600, 7200], function () use ($library_id) {
-                if ($library_id !== 'theses') return null;
-                return User::role('Advisor')
-                    ->orderByDesc('advisor_items_count')
-                    ->orderBy('name')
-                    ->select('id', 'name', 'name_kh', 'title_type_code')
-                    ->withCount([
-                        'advisor_items' => fn($q) =>
-                        $q->where('library_id', $library_id),
-                    ])
-                    ->having('advisor_items_count', '>', 0)
-                    ->get();
-            });
-        }
+        // 2. Publishers Key (Must be different from Authors Key)
+        $publishersKey = "publishers_" . $library_suffix;
+        $publishers = Cache::flexible($publishersKey, [3600, 7200], function () use ($library_id) {
+            return User::role('Publisher')
+                ->when($library_id, fn($q) => $q->where('library_id', $library_id))
+                ->select('id', 'name', 'name_kh', 'title_type_code', 'library_id')
+                ->withCount('publisher_items')
+                // ->having('publisher_items_count', '>', 0)
+                ->orderByDesc('publisher_items_count')
+                ->get();
+        });
 
         $languages = Cache::flexible("languages_{$library_id}", [3600, 7200], function () use ($library_id) {
             return Language::select('id', 'code', 'name', 'name_kh', 'image')
@@ -762,7 +748,6 @@ class ResourceController extends Controller
             'categories' => $categories,
             'authors' => $authors,
             'publishers' => $publishers,
-            'advisors' => $advisors,
         ]);
     }
 }

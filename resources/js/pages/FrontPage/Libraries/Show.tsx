@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Icons
 import SocialShareButtons from '@/components/Button/SocialShareButtons';
+import { cn } from '@/lib/utils';
 import { BookOpen, ExternalLink, Globe, Info, Mail, MapPin, Phone } from 'lucide-react';
 import ResourcesSection from './ResourcesSection';
 
@@ -50,7 +51,7 @@ const Show = () => {
     const libName = isKh ? libraryInfo?.name_kh || libraryInfo?.name : libraryInfo?.name;
     const libDescription = isKh ? libraryInfo?.short_description_kh || libraryInfo?.short_description : libraryInfo?.short_description;
 
-    const coverImage = libraryInfo?.banner ? `/assets/images/libraries/${libraryInfo.banner}` : '/images/default-banner.jpg';
+    const coverImage = libraryInfo?.banner ? `/assets/images/libraries/${libraryInfo.banner}` : '';
     const logoImage = libraryInfo?.image ? `/assets/images/libraries/${libraryInfo.image}` : null;
 
     return (
@@ -59,14 +60,21 @@ const Show = () => {
 
             {/* 1. Hero / Header Section */}
             <div className="relative w-full bg-background">
-                <div className="group relative h-60 w-full overflow-hidden sm:h-80 lg:h-96">
-                    <img src={coverImage} className="h-full w-full object-cover transition-transform duration-700" alt={libName} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-                </div>
+                {coverImage && (
+                    <div className="group relative h-60 w-full overflow-hidden sm:h-80 lg:h-96">
+                        <img src={coverImage} className="h-full w-full object-cover transition-transform duration-700" alt={libName} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+                    </div>
+                )}
 
-                <div className="relative container mx-auto px-4">
-                    <div className="relative -mt-24 flex flex-col items-start gap-6 pb-6 sm:-mt-32 sm:flex-row sm:items-end sm:justify-between">
-                        <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-end">
+                <div className="section-container relative">
+                    <div
+                        className={cn(
+                            'relative flex flex-col items-start gap-6 pb-6 sm:flex-row sm:items-end sm:justify-between',
+                            coverImage ? '-mt-24 sm:-mt-32' : 'mt-4',
+                        )}
+                    >
+                        <div className="flex flex-col flex-wrap items-start gap-6 sm:flex-row sm:items-end">
                             <div className="relative shrink-0 rounded-3xl bg-background shadow-lg">
                                 <Avatar className="h-32 w-32 rounded-2xl border sm:h-44 sm:w-44">
                                     <AvatarImage src={logoImage ?? ''} className="object-cover" />
@@ -99,7 +107,7 @@ const Show = () => {
             </div>
 
             {/* 2. Main Navigation & Content */}
-            <main className="container mx-auto px-4 py-12">
+            <main className="section-container py-12">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
                     <TabsList className="inline-flex h-12 w-full justify-start gap-2 bg-transparent p-0 sm:w-auto">
                         <TabsTrigger
@@ -177,15 +185,17 @@ const Show = () => {
                                             )}
                                         </div>
 
-                                        <div className="border-t border-border/40 px-4 pt-2">
-                                            <div className="flex items-center justify-between text-[13px] text-muted-foreground">
-                                                <span className="flex items-center gap-2">
-                                                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-500/80" />
-                                                    {libraryInfo?.opening_days}
-                                                </span>
-                                                <span className="font-medium">{libraryInfo?.opening_hours}</span>
+                                        {libraryInfo?.opening_days && libraryInfo?.opening_hours && (
+                                            <div className="border-t border-border/40 px-4 pt-2">
+                                                <div className="flex items-center justify-between text-[13px] text-muted-foreground">
+                                                    <span className="flex items-center gap-2">
+                                                        <div className="h-1.5 w-1.5 rounded-full bg-emerald-500/80" />
+                                                        {libraryInfo?.opening_days}
+                                                    </span>
+                                                    <span className="font-medium">{libraryInfo?.opening_hours}</span>
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
                                     </div>
                                 </div>
                             </aside>

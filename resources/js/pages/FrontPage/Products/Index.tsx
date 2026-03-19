@@ -59,7 +59,7 @@ const Index = () => {
                             {products.map((product) => (
                                 <Link
                                     key={product.id}
-                                    href={`/product/${product.id}`}
+                                    href={`#`}
                                     className="group rounded-2xl border border-gray-100 bg-white p-8 shadow-md transition-all hover:-translate-y-1 hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 dark:shadow-none dark:hover:border-gray-700"
                                 >
                                     <div className={`mb-6 flex h-16 w-16 items-center justify-center rounded-xl ${product.color}`}>
@@ -77,10 +77,10 @@ const Index = () => {
                                             </li>
                                         ))}
                                     </ul>
-                                    <div className="mt-8 flex items-center text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                                    {/* <div className="mt-8 flex items-center text-sm font-bold text-indigo-600 dark:text-indigo-400">
                                         {t('View Product Details')}{' '}
                                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                    </div>
+                                    </div> */}
                                 </Link>
                             ))}
                         </div>

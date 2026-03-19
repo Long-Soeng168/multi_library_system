@@ -28,7 +28,25 @@ export default function ResourceSidebar() {
     });
 
     const updateFilters = (updates: Partial<typeof filters>) => {
-        const newFilters = { ...filters, ...updates };
+        let newFilters;
+
+        // Check if we are updating the library_id
+        if ('library_id' in updates) {
+            // Reset everything else, but keep the new library_id
+            newFilters = {
+                library_id: updates.library_id || '',
+                category_code: '',
+                grade_code: '',
+                author_id: '',
+                publisher_id: '',
+                advisor_id: '',
+                language_code: '',
+                from_year: '',
+                to_year: '',
+            };
+        } else {
+            newFilters = { ...filters, ...updates };
+        }
         setFilters(newFilters);
         applyFilter(newFilters);
     };

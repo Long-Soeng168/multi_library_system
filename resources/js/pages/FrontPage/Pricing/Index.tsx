@@ -56,7 +56,7 @@ const Index = () => {
                 { text: t('Optional extended support'), active: false },
             ],
             cta: t('Contact for Pricing'),
-            href: '/support',
+            href: '/contact',
             popular: false,
         },
     ];

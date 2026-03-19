@@ -154,7 +154,7 @@ const Index = () => {
                         </p>
                         <div className="flex flex-col justify-center gap-4 sm:flex-row">
                             <Link
-                                href="/support"
+                                href="/contact"
                                 className="rounded-lg bg-white px-8 py-4 font-semibold text-indigo-600 shadow-lg transition-all hover:scale-105 hover:bg-gray-50"
                             >
                                 {t('Get in Touch')}

@@ -8,14 +8,19 @@ const BookCardHoverGradient = ({
     title,
     subTitle,
     image_url,
+    library_name,
 }: {
     badgeText?: string;
     title?: string;
     subTitle?: string;
     image_url?: string;
+    library_name?: string;
 }) => {
     const { name, app_url } = usePage<any>().props;
 
+    if (!library_name) {
+        library_name = name;
+    }
     return (
         <StyledWrapper className="h-full">
             <div className="relative h-full">
@@ -33,7 +38,7 @@ const BookCardHoverGradient = ({
                                         <span className="text-[8px] leading-none font-semibold tracking-[0.3em] text-foreground text-muted-foreground uppercase">
                                             Available at
                                         </span>
-                                        <span className="font-serif text-[10px] tracking-wide text-foreground italic">{name}</span>
+                                        <span className="font-serif text-[10px] tracking-wide text-foreground italic">{library_name}</span>
                                     </div>
 
                                     {/* 3. The Title Block - Bold Modern Sans */}
