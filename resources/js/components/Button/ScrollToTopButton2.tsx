@@ -49,7 +49,7 @@ const StyledWrapper = styled.div`
     right: 20px;
     z-index: 30;
     .scrolldown {
-        --color: var(--foreground);
+        --color: var(--primary);
         --sizeX: 30px;
         --sizeY: 50px;
         position: relative;
