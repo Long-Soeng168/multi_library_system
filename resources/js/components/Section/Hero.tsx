@@ -27,7 +27,7 @@ const Hero = () => {
 
                         <div className="mb-12 flex flex-col gap-4 sm:flex-row">
                             <Link
-                                href="/banalai_register"
+                                href="/bannalai-login"
                                 className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 text-center font-semibold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl sm:w-auto"
                             >
                                 {t('Get Started')}

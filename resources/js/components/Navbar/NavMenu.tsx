@@ -1,7 +1,7 @@
 import useTranslation from '@/hooks/use-translation';
 import { cn } from '@/lib/utils';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpenTextIcon, ChevronDown, HomeIcon, InfoIcon, NewspaperIcon } from 'lucide-react';
+import { BookOpenTextIcon, ChevronDown, HeadsetIcon, HomeIcon, InfoIcon, PackageIcon, TagIcon } from 'lucide-react';
 import { useState } from 'react';
 
 export const NavMenu = ({ orientation = 'horizontal' }: { orientation?: 'horizontal' | 'vertical' }) => {
@@ -10,19 +10,12 @@ export const NavMenu = ({ orientation = 'horizontal' }: { orientation?: 'horizon
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
     const menuItems = [
-        { href: '/', icon: <HomeIcon size={18} />, label: t('Home') },
-        { href: '/resources', icon: <BookOpenTextIcon size={18} />, label: t('Resources') },
-        { href: '/posts', icon: <NewspaperIcon size={18} />, label: t('Posts') },
-        {
-            href: '/about', // Changed from # so the link actually goes somewhere
-            icon: <InfoIcon size={18} />,
-            label: t('About'),
-            dropdown: [
-                { href: '/about', label: t('About Us') },
-                { href: '/our-journey', label: t('Our Journey') },
-                { href: '/our-staffs', label: t('Our Staffs') },
-            ],
-        },
+        { href: '/', icon: <HomeIcon size={16} />, label: t('Home') },
+        { href: '/resources', icon: <BookOpenTextIcon size={16} />, label: t('Resources') },
+        { href: '/products', icon: <PackageIcon size={16} />, label: t('Products') },
+        { href: '/pricing', icon: <TagIcon size={16} />, label: t('Pricing') },
+        { href: '/about', icon: <InfoIcon size={16} />, label: t('About') },
+        { href: '/support', icon: <HeadsetIcon size={16} />, label: t('Support') },
     ];
 
     const isActive = (item: any) => {

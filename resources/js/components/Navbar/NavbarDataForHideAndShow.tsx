@@ -24,9 +24,9 @@ const NavbarDataForHideAndShow = () => {
                             <NavLanguage />
 
                             {/* Start Mobile Menu */}
-                            {/* <div className="hidden max-[1000px]:block">
+                            <div className="hidden max-[1000px]:block">
                                 <NavSheet />
-                            </div> */}
+                            </div>
                             {/* End Mobile Menu */}
                         </div>
                     </div>

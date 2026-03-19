@@ -32,7 +32,7 @@ const HeroFooter = () => {
                 </div>
 
                 <Link
-                    href="/banalai_register"
+                    href="/bannalai-login"
                     className="inline-block transform rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 px-10 py-4 font-bold text-white shadow-lg transition-all hover:-translate-y-1 hover:shadow-2xl hover:brightness-110 active:scale-95"
                 >
                     {t('Get Started Free')}

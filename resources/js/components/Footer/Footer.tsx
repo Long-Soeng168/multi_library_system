@@ -11,11 +11,17 @@ export default function Footer() {
     const isActive = (href: string) => url === href || url.startsWith(href + '/');
 
     const quickLinks = [
-        { href: '/', label: t('Home'), color: 'text-yellow-400', dot: 'bg-yellow-400' },
-        { href: '/products', label: t('Products'), color: 'hover:text-indigo-400', dot: 'bg-indigo-600' },
+        { href: '/', label: t('Home'), color: 'hover:text-yellow-400', dot: 'bg-yellow-400' },
+
+        { href: '/products', label: t('Products'), color: 'hover:text-indigo-400', dot: 'bg-indigo-500' },
+
         { href: '/pricing', label: t('Pricing'), color: 'hover:text-green-400', dot: 'bg-green-500' },
-        { href: '/about', label: t('About'), color: 'hover:text-indigo-400', dot: 'bg-indigo-600' },
-        { href: '/support', label: t('Support'), color: 'hover:text-indigo-400', dot: 'bg-indigo-600' },
+
+        { href: '/about', label: t('About'), color: 'hover:text-blue-400', dot: 'bg-blue-500' },
+
+        { href: '/support', label: t('Support'), color: 'hover:text-purple-400', dot: 'bg-purple-500' },
+
+        { href: '/contact', label: t('Contact'), color: 'hover:text-pink-400', dot: 'bg-pink-500' },
     ];
 
     const tools: any[] = [

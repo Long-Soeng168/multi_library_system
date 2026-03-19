@@ -20,7 +20,7 @@ const Index = () => {
                 { text: 'Bookcambo integrated', active: true, link: 'https://www.bookcambo.com' },
             ],
             cta: t('Get Started'),
-            href: '/banalai_register',
+            href: '/bannalai-login',
             popular: false,
         },
         {
@@ -39,7 +39,7 @@ const Index = () => {
                 { text: 'Bookcambo integrated', active: true, link: 'https://www.bookcambo.com' },
             ],
             cta: t('Get Started'),
-            href: '/banalai_register',
+            href: '/bannalai-login',
             popular: true,
         },
         {
