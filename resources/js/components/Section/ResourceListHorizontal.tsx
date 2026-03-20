@@ -117,7 +117,7 @@ const ResourceListHorizontal = ({ className }: { className?: string }) => {
                                     {item?.library?.id && (
                                         <Link
                                             href={`/libraries/${item?.library?.id}`}
-                                            className="group/library mr-2 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-muted/30 px-3 py-1 transition-all hover:border-primary/30 hover:bg-muted"
+                                            className="group/library mr-2 hidden md:inline-flex items-center gap-2 rounded-full border border-primary/20 bg-muted/30 px-3 py-1 transition-all hover:border-primary/30 hover:bg-muted"
                                         >
                                             <div className="flex items-center gap-2 text-[13px] leading-none">
                                                 <span className="text-muted-foreground/80">{t('Posted by')}</span>
@@ -140,10 +140,10 @@ const ResourceListHorizontal = ({ className }: { className?: string }) => {
                                     {item?.file_name && (
                                         <span className="group/file inline-flex items-center gap-2 rounded-full border border-primary/20 bg-muted/40 px-2 py-1 transition-all hover:border-primary/30 hover:bg-muted dark:bg-muted/20">
                                             {/* Minimalist Extension Text */}
-                                            <div className="flex items-center gap-1 text-[11px] font-black tracking-widest text-foreground/80 uppercase group-hover/file:text-primary">
-                                                <span className="relative flex h-2 w-2">
+                                            <div className="flex items-center gap-1 text-[10px] md:text-[11px] font-medium text-foreground/80 uppercase group-hover/file:text-primary">
+                                                <span className="relative flex size-1 md:size-2">
                                                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-30"></span>
-                                                    <span className="relative inline-flex h-2 w-2 rounded-full bg-primary/60"></span>
+                                                    <span className="relative inline-flex size-1 md:size-2 rounded-full bg-primary/60"></span>
                                                 </span>
 
                                                 {item.file_name.split('.').pop() || 'FILE'}

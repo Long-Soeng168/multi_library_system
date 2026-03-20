@@ -1,6 +1,7 @@
 import LoginForm from '@/components/Auth/LoginForm';
 import FrontPageLayout from '@/layouts/FrontPageLayout';
 import { Link } from '@inertiajs/react';
+import { BookOpenIcon, ShieldCheckIcon, SmartphoneIcon, ZapIcon } from 'lucide-react';
 
 const BanalaiLogin = () => {
     // Adjusted for better visibility in both modes
@@ -32,36 +33,39 @@ const BanalaiLogin = () => {
                                             {
                                                 title: 'Digital Library Access',
                                                 desc: 'Access millions of digital resources, e-books, and journals from anywhere.',
-                                                icon: `/assets/icon1.png`,
+                                                icon: BookOpenIcon, // Pass the component reference
                                             },
                                             {
                                                 title: 'Secure & Reliable',
                                                 desc: 'Your data is protected with enterprise-grade security and encryption.',
-                                                icon: `/assets/icon2.png`,
+                                                icon: ShieldCheckIcon,
                                             },
                                             {
                                                 title: 'Fast & Efficient',
                                                 desc: 'Lightning-fast search and instant access to all your library resources.',
-                                                icon: `/assets/icon3.png`,
+                                                icon: ZapIcon,
                                             },
                                             {
                                                 title: 'Mobile Friendly',
                                                 desc: 'Access your library on any device, anywhere, at any time.',
-                                                icon: `/assets/icon4.png`,
+                                                icon: SmartphoneIcon,
                                             },
-                                        ].map((item, index) => (
-                                            <div key={index} className="flex items-start">
-                                                <div
-                                                    className={`mr-4 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg ${imgBgColors[index % imgBgColors.length]}`}
-                                                >
-                                                    <img src={item.icon} alt={item.title} className="h-6 w-6 object-contain" />
+                                        ].map((item, index) => {
+                                            const Icon = item.icon; // Capitalize to use as a component
+                                            return (
+                                                <div key={index} className="flex items-start">
+                                                    <div
+                                                        className={`mr-4 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg ${imgBgColors[index % imgBgColors.length]}`}
+                                                    >
+                                                        <Icon className="h-6 w-6 text-white" strokeWidth={2} />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="mb-1 text-xl font-semibold">{item.title}</h3>
+                                                        <p className="text-indigo-100/80">{item.desc}</p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h3 className="mb-1 text-xl font-semibold">{item.title}</h3>
-                                                    <p className="text-indigo-100/80">{item.desc}</p>
-                                                </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
 
                                     <div className="mt-12 border-t border-white/10 pt-8">

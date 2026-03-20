@@ -28,7 +28,7 @@ const ResourceDetail = ({
     return (
         <div className="flex-wrap gap-6 sm:flex">
             {/* Left Column: Title and Actions */}
-            <div className={cn('sm:max-w-sm sm:min-w-xs', imageContainerClassname)}>
+            <div className={cn('sm:max-w-sm mb-2 sm:min-w-xs', imageContainerClassname)}>
                 <div className="flex items-center justify-center">
                     <BookImagesGallery
                         readUrl={showData?.file_name ? `/view-pdf?file_name=${showData?.file_name}&id=${showData?.id}&resource=items` : ''}

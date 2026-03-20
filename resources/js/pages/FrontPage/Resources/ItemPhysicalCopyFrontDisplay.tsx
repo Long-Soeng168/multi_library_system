@@ -31,8 +31,8 @@ const ItemCopiesTable = ({ copies, showData }: { copies: any[]; showData: any })
                         <TableHeadWithSort label="Barcode" />
                         <TableHeadWithSort label="Call Number" />
                         <TableHeadWithSort label="Item Type" />
-                        <TableHeadWithSort label="Library" />
-                        <TableHeadWithSort label="Loan Status" />
+                        {/* <TableHeadWithSort label="Library" /> */}
+                        {/* <TableHeadWithSort label="Loan Status" /> */}
                         <TableHeadWithSort label="Public Note" />
                     </TableRow>
                 </TableHeader>
@@ -51,12 +51,12 @@ const ItemCopiesTable = ({ copies, showData }: { copies: any[]; showData: any })
                                 <TableCellText value={item.item_type?.name ?? '---'} />
 
                                 {/* 4. Library (Custom Layout) */}
-                                <TableCellActions>
+                                {/* <TableCellActions>
                                     <div className="text-sm font-medium">{item.library?.name ?? '---'}</div>
-                                </TableCellActions>
+                                </TableCellActions> */}
 
                                 {/* 7. Computed Status Badge */}
-                                <TableCellActions tableCellClassName="px-4">
+                                {/* <TableCellActions tableCellClassName="px-4">
                                     <div className="flex flex-col gap-1">
                                         <TableCellBadge
                                             value={currentLocale === 'kh' ? status.label_kh : status.label}
@@ -84,7 +84,7 @@ const ItemCopiesTable = ({ copies, showData }: { copies: any[]; showData: any })
                                             </span>
                                         )}
                                     </div>
-                                </TableCellActions>
+                                </TableCellActions> */}
 
                                 {/* 9. Notes (Public) */}
                                 <TableCellText value={item.public_note || '---'} className="line-clamp-2 max-w-[150px] text-xs" />

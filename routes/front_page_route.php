@@ -20,10 +20,14 @@ Route::get('/resources', [ResourceController::class, 'libraries']); //e.g: /reso
 Route::get('/libraries/{library_id}', [ResourceController::class, 'library_show']); //e.g: /resources/theses, /resources/publicaitons
 Route::get('/resources/detail/{id}', [ResourceController::class, 'item_show']); //e.g: /resources/theses, /resources/publicaitons
 Route::get('/theses/{id}', [ResourceController::class, 'item_show']); //e.g: /resources/theses, /resources/publicaitons
+Route::get('/pages/{page_code}', [FrontPageController::class, 'page_show']); //e.g: /resources/theses, /resources/publicaitons
 
 
 Route::get('/profile', function () {
     return Inertia::render('FrontPage/Profile/Index');
+});
+Route::get('/search_by_google', function () {
+    return Inertia::render('FrontPage/SearchByGoogle');
 });
 
 Route::get('/scan-qr', function () {

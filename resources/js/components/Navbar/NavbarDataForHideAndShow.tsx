@@ -1,9 +1,8 @@
+import LibraryLoginButton from '../Button/LibraryLoginButton';
 import { NavbarLogo3 } from '../Logo/NavbarLogo3';
 import { NavbarLogo4 } from '../Logo/NavbarLogo4';
-import LibrarySearchSheet from '../Search/LibrarySearchSheet';
 import { SwitchDarkModeSmoothAnimated } from '../Switch/SwitchDarkModeSmoothAnimated';
 import NavLanguage from './NavLanguage';
-import { NavMenu2 } from './NavMenu2';
 import { NavSheet } from './NavSheet';
 
 const NavbarDataForHideAndShow = () => {
@@ -19,7 +18,8 @@ const NavbarDataForHideAndShow = () => {
                             <NavMenu2 />
                         </div> */}
                         <div className="flex items-center gap-3">
-                            <LibrarySearchSheet />
+                            {/* <LibrarySearchSheet /> */}
+                            <LibraryLoginButton />
                             <SwitchDarkModeSmoothAnimated />
                             <NavLanguage />
 
@@ -43,7 +43,8 @@ const NavbarDataForHideAndShow = () => {
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <LibrarySearchSheet />
+                            {/* <LibrarySearchSheet /> */}
+                            <LibraryLoginButton />
                             <SwitchDarkModeSmoothAnimated />
                             <NavLanguage />
 

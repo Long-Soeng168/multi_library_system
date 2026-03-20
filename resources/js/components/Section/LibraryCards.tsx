@@ -42,7 +42,7 @@ const LibraryCards = () => {
                                     <div className="absolute inset-0 bg-primary opacity-0 transition-opacity duration-500 group-hover:opacity-10" />
 
                                     <img
-                                        className="relative z-10 size-20 object-contain transition-transform duration-500 group-hover:scale-110"
+                                        className="relative z-10 size-20 bg-white object-contain transition-transform duration-500"
                                         src={`/assets/images/libraries/${library.image}`}
                                         alt={library.name}
                                         onError={(e: any) => {

@@ -8,6 +8,7 @@ use App\Models\ItemCategory;
 use App\Models\ItemMainCategory;
 use App\Models\KeyValue;
 use App\Models\Library;
+use App\Models\Page;
 use App\Models\Post;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -48,6 +49,16 @@ class FrontPageController extends Controller
         return Inertia::render('FrontPage/Index', [
             'recentItems' => $recentItems,
             'libraries' => $libraries,
+        ]);
+    }
+    public function page_show(string $page_code)
+    {
+        $showData = Page::where('code', $page_code)->firstOrFail();
+
+        // return $showData;
+
+        return Inertia::render('FrontPage/Pages/Show', [
+            'showData' => $showData,
         ]);
     }
 
