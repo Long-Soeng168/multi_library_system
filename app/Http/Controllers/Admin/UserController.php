@@ -17,7 +17,6 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 

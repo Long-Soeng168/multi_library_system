@@ -5,12 +5,13 @@ import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { ArrowRightLeft, HomeIcon } from 'lucide-react';
 import AppLogo from './app-logo';
+import LibraryStatusBadge from './Badge/LibraryStatusBadge';
 import NavLanguage from './Navbar/NavLanguage';
 import { SwitchDarkModeSmoothAnimated } from './Switch/SwitchDarkModeSmoothAnimated';
 import { Button } from './ui/button';
 
 export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: BreadcrumbItemType[] }) {
-    const { can_switch_language, user_library } = usePage().props;
+    const { can_switch_language, user_library } = usePage<any>().props;
     const { t } = useTranslation();
     return (
         <header className="flex h-auto shrink-0 items-center gap-2 border-b border-sidebar-border/50 px-6 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4">
@@ -24,6 +25,7 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
                         <AppLogo />
                     </div>
                     <div className="flex flex-wrap items-center justify-end gap-2">
+                        <LibraryStatusBadge />
                         {user_library?.id && (
                             <Link href={'/admin/circulations-checkout'}>
                                 <Button variant="secondary" className="h-9 overflow-hidden rounded-md border hover:border-primary">

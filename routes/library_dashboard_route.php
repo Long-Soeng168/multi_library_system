@@ -33,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('circulations/{circulation}', [CirculationController::class, 'destroy']);
         Route::post('circulations/{circulation}/recover', [CirculationController::class, 'recover']);
         Route::post('circulations/{circulation}/update-fine-status', [CirculationController::class, 'update_fine_status']);
- 
+
         // Circulation Rules
         Route::resource('circulation-rules', CirculationRuleController::class);
         Route::post('circulation-rules/{circulation_rule}/update', [CirculationRuleController::class, 'update']);
@@ -93,6 +93,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Misc Settings
         Route::resource('libraries', LibraryController::class);
+        Route::get('/edit-info', [LibraryController::class, 'edit_info']);
         Route::post('libraries/{library}/update', [LibraryController::class, 'update']);
         Route::post('libraries/{id}/recover', [LibraryController::class, 'recover']);
 
@@ -101,3 +102,4 @@ Route::middleware(['auth'])->group(function () {
         Route::post('types/{id}/recover', [TypeController::class, 'recover']);
     });
 });
+Route::get('/create-library', [LibraryController::class, 'create_library']);

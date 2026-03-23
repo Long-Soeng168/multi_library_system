@@ -14,7 +14,7 @@ import usePermission from '@/hooks/use-permission';
 import useTranslation from '@/hooks/use-translation';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 
@@ -49,6 +49,8 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
     const [files, setFiles] = useState<File[] | null>(null); // For Thumbnail
     const [bannerFiles, setBannerFiles] = useState<File[] | null>(null); // For Banner
 
+    const { default_owner_id, url } = usePage<any>().props;
+
     const { data, setData, post, processing, transform, progress, errors, reset } = useForm<TypeForm>({
         name: editData?.name || '',
         name_kh: editData?.name_kh || '',
@@ -66,7 +68,7 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
         opening_hours: editData?.opening_hours || '',
         opening_days: editData?.opening_days || '',
         status: editData?.status || 'in_review',
-        owner_id: editData?.owner_id || '',
+        owner_id: editData?.owner_id || default_owner_id || '',
     });
 
     const onSubmit = (e: React.FormEvent) => {
@@ -84,7 +86,7 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
         } else {
             post('/admin/libraries', {
                 onSuccess: (page: any) => {
-                    reset();
+                    if (!default_owner_id) reset();
                     setFiles(null);
                     setFlashMessage({ message: page.props.flash?.success, type: 'success' });
                 },
@@ -92,17 +94,18 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
         }
     };
 
+    const { t, currentLocale } = useTranslation();
+    const hasPermission = usePermission();
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/dashboard' },
-        { title: 'Libraries', href: '/admin/libraries' },
+        { title: 'Libraries', href: hasPermission('library create') ? '/admin/libraries' : '#' },
         { title: editData?.name || 'Create', href: '#' },
     ];
 
-    const { t, currentLocale } = useTranslation();
-    const hasPermission = usePermission();
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <form onSubmit={onSubmit} className="form">
+            <form onSubmit={onSubmit} className="form" key={url}>
                 <AlertFlashMessage
                     key={flashMessage.message}
                     type={flashMessage.type}
@@ -146,7 +149,7 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
                     </div>
                 ) : (
                     <>
-                        {users?.length > 0 && (
+                        {users?.length > 0 && hasPermission('library create') && (
                             <>
                                 <FormCombobox
                                     name="owner_id"
@@ -228,14 +231,21 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
                             />
 
                             <div className="col-span-2 grid gap-6 md:grid-cols-2">
-                                <div>
-                                    <FormFileUpload key={editData?.image} id="image" label="Logo" files={files} setFiles={setFiles} />
+                                <div className="space-y-2">
+                                    <FormFileUpload
+                                        error={errors?.image}
+                                        key={editData?.image}
+                                        id="image"
+                                        label="Logo"
+                                        files={files}
+                                        setFiles={setFiles}
+                                    />
                                     {editData?.image && (
                                         <UploadedImage label="Uploaded Logo" images={editData?.image} basePath="/assets/images/libraries/thumb/" />
                                     )}
                                 </div>
                                 <div>
-                                    <FormFileUpload id="banner" label="Banner" files={bannerFiles} setFiles={setBannerFiles} />
+                                    <FormFileUpload error={errors?.banner} id="banner" label="Banner" files={bannerFiles} setFiles={setBannerFiles} />
                                     {editData?.banner && (
                                         <UploadedImage label="Current Banner" images={editData?.banner} basePath="/assets/images/libraries/" />
                                     )}
@@ -244,6 +254,7 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
 
                             {/* Contact Section */}
                             <FormField
+                                required
                                 id="email"
                                 name="email"
                                 label="Email"
@@ -252,6 +263,7 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
                                 error={errors.email}
                             />
                             <FormField
+                                required
                                 id="phone"
                                 name="phone"
                                 label="Phone"
@@ -272,6 +284,7 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
 
                             {/* Location Section */}
                             <FormField
+                                required
                                 id="address"
                                 name="address"
                                 label="Address"
@@ -310,21 +323,23 @@ export default function Create({ users, editData, readOnly }: { users: any[]; ed
 
                             {/* Status Selector - Ensure your UI kit has a Select component or use raw HTML */}
                         </div>
-                        <div>
-                            <FormRadioStatus
-                                name="status"
-                                label={t('Status')}
-                                options={LIBRARY_STATUS_OPTIONS.map((item) => ({
-                                    value: item.value,
-                                    label: t(item.label),
-                                    // description: t(item.description),
-                                }))}
-                                value={data.status || 'in_review'}
-                                onChange={(val) => setData('status', val)}
-                                error={errors.status}
-                                radioGroupClassName="grid-cols-4 max-w-full"
-                            />
-                        </div>
+                        {hasPermission('library create') && (
+                            <div>
+                                <FormRadioStatus
+                                    name="status"
+                                    label={t('Status')}
+                                    options={LIBRARY_STATUS_OPTIONS.map((item) => ({
+                                        value: item.value,
+                                        label: t(item.label),
+                                        // description: t(item.description),
+                                    }))}
+                                    value={data.status || 'in_review'}
+                                    onChange={(val) => setData('status', val)}
+                                    error={errors.status}
+                                    radioGroupClassName="grid-cols-4 max-w-full"
+                                />
+                            </div>
+                        )}
                     </>
                 )}
 

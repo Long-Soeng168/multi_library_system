@@ -21,15 +21,15 @@ class LibraryController extends Controller implements HasMiddleware
     {
         return [
             new Middleware('permission:library view', only: ['index', 'show']),
-            new Middleware('permission:library create', only: ['create', 'store']),
-            new Middleware('permission:library update', only: ['edit', 'update', 'recover']),
+            new Middleware('permission:library create', only: ['create']),
+            // new Middleware('permission:library update', only: ['edit', 'update', 'recover']),
             new Middleware('permission:library delete', only: ['destroy', 'destroy_image']),
         ];
     }
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, $library_code = null)
     {
         $perPage = $request->input('perPage', 10);
         $search = $request->input('search', '');
@@ -37,6 +37,7 @@ class LibraryController extends Controller implements HasMiddleware
         $sortDirection = $request->input('sortDirection', 'desc');
         $status = $request->input('status');
         $trashed = $request->input('trashed'); // '', 'with', 'only'
+
 
         $query = Library::query();
 
@@ -82,6 +83,16 @@ class LibraryController extends Controller implements HasMiddleware
     {
         return Inertia::render('Admin/Library/Create', [
             'users' => User::where('library_id', null)->orderByDesc('id')->get(),
+
+        ]);
+    }
+    public function create_library(Request $request)
+    {
+        if ($request->user()->library?->code) {
+            return redirect('/dashboard/library/' . $request->user()->library?->code . '/edit-info');
+        }
+        return Inertia::render('Admin/Library/Create', [
+            'default_owner_id' => $request->user()->id,
         ]);
     }
 
@@ -90,6 +101,7 @@ class LibraryController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'order_index' => 'required|numeric',
             'name' => 'required|string|max:255',
@@ -97,16 +109,16 @@ class LibraryController extends Controller implements HasMiddleware
             'external_link' => 'nullable|string|max:255',
             'short_description' => 'nullable|string',
             'short_description_kh' => 'nullable|string',
-            'image' => 'nullable|mimes:jpeg,png,jpg,gif,webp,svg|max:4096',
+            'image' => 'required|mimes:jpeg,png,jpg,gif,webp,svg|max:4096',
             'banner' => 'nullable|mimes:jpeg,png,jpg,gif,webp,svg|max:4096', // Usually larger than thumbnail
 
             // Contact Info
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:50',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:50',
             'website_url' => 'nullable|string|max:255',
 
             // Location
-            'address' => 'nullable|string|max:500',
+            'address' => 'required|string|max:500',
             'map_link' => 'nullable|string',
 
             // Operational
@@ -193,6 +205,29 @@ class LibraryController extends Controller implements HasMiddleware
             })->orderByDesc('id')->get(),
         ]);
     }
+    public function edit_info(Request $request, $library_code = null)
+    {
+        $user = $request->user();
+        $isLibraryStaff = false;
+        $hasGlobalPermission = $user->hasAnyPermission(['user view']);
+        $currentUsedLibrary = Library::where('code', $library_code)->firstOrFail();
+        if ($library_code) {
+            $isLibraryStaff = ($user->library_id === $currentUsedLibrary->id) &&
+                in_array($user->library_role, ['Owner', 'Staff']);
+        }
+        if ($isLibraryStaff) {
+            // ...
+        } else if ($hasGlobalPermission) {
+            // ...
+        } else {
+            abort(403, 'You do not have permission to view this.');
+        }
+        // return ($currentUsedLibrary);
+        return Inertia::render('Admin/Library/Create', [
+            'editData' => $currentUsedLibrary,
+            'users' => User::where('library_id', $currentUsedLibrary->id)->orderByDesc('id')->get(),
+        ]);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -228,8 +263,24 @@ class LibraryController extends Controller implements HasMiddleware
             'status' => 'required|in:active,in_review,suspended,expired',
             'owner_id' => 'nullable|exists:users,id',
         ]);
-        // dd($request->all());
 
+        // dd($request->all());
+        $library_code = $library->code;
+        $user = $request->user();
+        $isLibraryStaff = false;
+        $hasGlobalPermission = $user->hasAnyPermission(['user view']);
+        if ($library_code) {
+            $currentUsedLibrary = Library::where('code', $library_code)->firstOrFail();
+            $isLibraryStaff = ($user->library_id === $currentUsedLibrary->id) &&
+                in_array($user->library_role, ['Owner', 'Staff']);
+        }
+        if ($isLibraryStaff) {
+            // ...
+        } else if ($hasGlobalPermission) {
+            // ...
+        } else {
+            abort(403, 'You do not have permission to view this.');
+        }
 
         try {
 
