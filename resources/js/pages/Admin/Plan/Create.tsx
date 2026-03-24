@@ -27,6 +27,8 @@ export default function Create({ editData, readOnly }: { editData?: any; readOnl
     const { data, setData, post, processing, errors, reset } = useForm({
         name: editData?.name || '',
         name_kh: editData?.name_kh || '',
+        billing_cycle_label: editData?.billing_cycle_label || '',
+        billing_cycle_label_kh: editData?.billing_cycle_label_kh || '',
 
         price: editData?.price || '',
         billing_cycle: editData?.billing_cycle || '',
@@ -103,6 +105,15 @@ export default function Create({ editData, readOnly }: { editData?: any; readOnl
                             error={errors.name_kh}
                             containerClassName="col-span-2"
                         />
+                        <FormField
+                            id="billing_cycle_label_kh"
+                            name="billing_cycle_label_kh"
+                            label="Billing Cycle Label Khmer"
+                            value={data.billing_cycle_label_kh}
+                            onChange={(val) => setData('billing_cycle_label_kh', val)}
+                            error={errors.billing_cycle_label_kh}
+                            containerClassName="col-span-2"
+                        />
 
                         <FormField
                             id="button_label_kh"
@@ -148,6 +159,15 @@ export default function Create({ editData, readOnly }: { editData?: any; readOnl
                             label="Price"
                             value={data.price}
                             onChange={(val) => setData('price', Number(val))}
+                        />
+
+                        <FormField
+                            id="billing_cycle_label"
+                            name="billing_cycle_label"
+                            label="Billing Cycle Label"
+                            value={data.billing_cycle_label}
+                            onChange={(val) => setData('billing_cycle_label', val)}
+                            error={errors.billing_cycle_label}
                         />
 
                         {/* Billing */}

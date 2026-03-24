@@ -109,6 +109,8 @@ class PlanController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'name_kh' => 'nullable|string|max:255',
+            'billing_cycle_label' => 'nullable|string|max:255',
+            'billing_cycle_label_kh' => 'nullable|string|max:255',
 
             'price' => 'required|numeric|min:0',
             'billing_cycle' => 'nullable|in:monthly,yearly',
@@ -188,6 +190,8 @@ class PlanController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'name_kh' => 'nullable|string|max:255',
+            'billing_cycle_label' => 'nullable|string|max:255',
+            'billing_cycle_label_kh' => 'nullable|string|max:255',
 
             'price' => 'required|numeric|min:0',
             'billing_cycle' => 'nullable|in:monthly,yearly',

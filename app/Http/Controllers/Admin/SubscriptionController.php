@@ -46,6 +46,9 @@ class SubscriptionController extends Controller implements HasMiddleware
             $query->onlyTrashed();
         }
 
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
         if ($request->plan_id) {
             $query->where('plan_id', $request->plan_id);
         }
