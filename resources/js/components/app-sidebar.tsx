@@ -8,6 +8,7 @@ import {
     ArrowLeftRightIcon,
     BarChart3,
     BookOpen,
+    CreditCardIcon,
     FilesIcon,
     Folder,
     LanguagesIcon,
@@ -238,6 +239,25 @@ const mainNavItems: {
             },
         ],
     },
+    {
+        title: 'Subscriptions',
+        url: '/admin/subscriptions',
+        icon: CreditCardIcon,
+        permission: 'subscription view',
+        items: [
+            {
+                title: 'Subscriptions',
+                url: '/admin/subscriptions',
+                permission: 'subscription view',
+            },
+            {
+                title: 'Plans',
+                url: '/admin/plans',
+                permission: 'plan view',
+            },
+        ],
+    },
+
     {
         title: 'Types',
         url: '/admin/types',

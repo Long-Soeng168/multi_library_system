@@ -19,8 +19,10 @@ use App\Http\Controllers\Admin\LibraryController;
 use App\Http\Controllers\Admin\LinkController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\PostCategoryController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\TypeController;
 use App\Http\Controllers\Admin\TypeGroupController;
 use App\Http\Controllers\Admin\UserCategoryController;
@@ -125,6 +127,18 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('admin/pages/images/{image}', [PageController::class, 'destroy_image']);
     Route::post('admin/pages/{page}/update', [PageController::class, 'update']);
     Route::post('admin/pages/{id}/recover', [PageController::class, 'recover']);
+
+    // Plan
+    Route::resource('admin/plans', PlanController::class);
+    Route::delete('admin/plans/images/{image}', [PlanController::class, 'destroy_image']);
+    Route::post('admin/plans/{plan}/update', [PlanController::class, 'update']);
+    Route::post('admin/plans/{id}/recover', [PlanController::class, 'recover']);
+
+    // Subscription
+    Route::resource('admin/subscriptions', SubscriptionController::class);
+    Route::delete('admin/subscriptions/images/{image}', [SubscriptionController::class, 'destroy_image']);
+    Route::post('admin/subscriptions/{subscription}/update', [SubscriptionController::class, 'update']);
+    Route::post('admin/subscriptions/{id}/recover', [SubscriptionController::class, 'recover']);
 
     // Post Category
     Route::resource('admin/post-categories', PostCategoryController::class);
