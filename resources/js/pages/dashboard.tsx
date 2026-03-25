@@ -1,3 +1,4 @@
+import UserActivePlan from '@/components/Card/UserActivePlan';
 import DashboardChart from '@/components/Chart/DashboardChart';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import usePermission from '@/hooks/use-permission';
@@ -185,6 +186,7 @@ export default function Dashboard() {
             <Head title="Dashboard" />
             {hasPermission('item view') && <DashboardChart />}
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
+                <UserActivePlan />
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     {user_library?.code ? (
                         <>

@@ -113,7 +113,7 @@ class PlanController extends Controller implements HasMiddleware
             'billing_cycle_label_kh' => 'nullable|string|max:255',
 
             'price' => 'required|numeric|min:0',
-            'billing_cycle' => 'nullable|in:monthly,yearly',
+            'billing_cycle' => 'nullable|in:forever,monthly,yearly',
 
             'max_books' => 'nullable|integer',
             'max_members' => 'nullable|integer',
@@ -135,11 +135,6 @@ class PlanController extends Controller implements HasMiddleware
         try {
             // ✅ Normalize data
             $validated['is_popular'] = $request->boolean('is_popular');
-
-            // ✅ Free plan → no billing cycle
-            if ((float) $validated['price'] === 0.0) {
-                $validated['billing_cycle'] = null;
-            }
 
             // ✅ Default limits (-1 = unlimited)
             $validated['max_books'] = $validated['max_books'] ?? 0;
@@ -194,7 +189,7 @@ class PlanController extends Controller implements HasMiddleware
             'billing_cycle_label_kh' => 'nullable|string|max:255',
 
             'price' => 'required|numeric|min:0',
-            'billing_cycle' => 'nullable|in:monthly,yearly',
+            'billing_cycle' => 'nullable|in:forever,monthly,yearly',
 
             'max_books' => 'nullable|integer',
             'max_members' => 'nullable|integer',
@@ -216,11 +211,6 @@ class PlanController extends Controller implements HasMiddleware
         try {
             // ✅ Normalize boolean
             $validated['is_popular'] = $request->boolean('is_popular');
-
-            // ✅ Free plan → remove billing
-            if ((float) $validated['price'] === 0.0) {
-                $validated['billing_cycle'] = null;
-            }
 
             // ✅ Default limits (-1 = unlimited)
             $validated['max_books'] = $validated['max_books'] ?? 0;

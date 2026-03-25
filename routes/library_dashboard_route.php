@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ItemTypeController;
 use App\Http\Controllers\Admin\ItemViewsEngagementController;
 use App\Http\Controllers\Admin\LibraryController;
 use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\TypeController;
 use App\Http\Controllers\Admin\UserCategoryController;
 use App\Http\Controllers\Admin\UserController;
@@ -101,5 +102,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('types/{type}/update', [TypeController::class, 'update']);
         Route::post('types/{id}/recover', [TypeController::class, 'recover']);
     });
+    
+    Route::get('/subscribe-to-plan', [SubscriptionController::class, 'subscribe_to_plan']);
 });
+
 Route::get('/create-library', [LibraryController::class, 'create_library']);

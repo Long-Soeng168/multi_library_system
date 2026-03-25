@@ -47,9 +47,9 @@ Route::get('/contact', function () {
 Route::get('/support', function () {
     return Inertia::render('FrontPage/Support/Index');
 });
-Route::get('/pricing', function () {
-    return Inertia::render('FrontPage/Pricing/Index');
-});
+
+Route::get('/pricing', [FrontPageController::class, 'pricing']);
+
 Route::get('/products', function () {
     return Inertia::render('FrontPage/Products/Index');
 });

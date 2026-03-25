@@ -177,7 +177,7 @@ export default function Create({ editData, readOnly }: { editData?: any; readOnl
                             value={data.billing_cycle}
                             onChange={(val) => setData('billing_cycle', val)}
                             options={[
-                                { value: '', label: 'None (Free)' },
+                                { value: 'forever', label: 'Forever' },
                                 { value: 'monthly', label: 'Monthly' },
                                 { value: 'yearly', label: 'Yearly' },
                             ]}
@@ -202,14 +202,14 @@ export default function Create({ editData, readOnly }: { editData?: any; readOnl
                             onChange={(val) => setData('max_members', Number(val))}
                         />
 
-                        <FormField
+                        {/* <FormField
                             id="max_storage_mb"
                             name="max_storage_mb"
                             type="number"
                             label="Max Storage MB (-1 unlimited)"
                             value={data.max_storage_mb}
                             onChange={(val) => setData('max_storage_mb', Number(val))}
-                        />
+                        /> */}
 
                         {/* Popular */}
                         <div className="flex items-center gap-3">

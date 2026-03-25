@@ -9,6 +9,7 @@ use App\Models\ItemMainCategory;
 use App\Models\KeyValue;
 use App\Models\Library;
 use App\Models\Page;
+use App\Models\Plan;
 use App\Models\Post;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -59,6 +60,14 @@ class FrontPageController extends Controller
 
         return Inertia::render('FrontPage/Pages/Show', [
             'showData' => $showData,
+        ]);
+    }
+    public function pricing()
+    {
+        $tableData = Plan::orderBy('order_index')->get();
+        // return $tableData;
+        return Inertia::render('FrontPage/Pricing/Index', [
+            'tableData' => $tableData,
         ]);
     }
 

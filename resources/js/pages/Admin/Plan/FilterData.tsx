@@ -65,6 +65,7 @@ const FilterData = () => {
                 <ComboboxSelect
                     options={[
                         { value: '', label: t('All') },
+                        { value: 'forever', label: t('Forever') },
                         { value: 'monthly', label: t('Monthly') },
                         { value: 'yearly', label: t('Yearly') },
                     ]}

@@ -76,7 +76,7 @@ const TableData = () => {
                                     <div className="flex flex-col shrink-0 whitespace-nowrap text-xs">
                                         <span>📚 Books: {renderLimit(item.max_books)}</span>
                                         <span>👥 Members: {renderLimit(item.max_members)}</span>
-                                        <span>💾 Storage: {renderLimit(item.max_storage_mb)} MB</span>
+                                        {/* <span>💾 Storage: {renderLimit(item.max_storage_mb)} MB</span> */}
                                     </div>
                                 </TableCell>
 

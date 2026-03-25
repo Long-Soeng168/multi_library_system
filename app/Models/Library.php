@@ -18,4 +18,8 @@ class Library extends Model
     {
         return $this->belongsTo(User::class, 'updated_by', 'id');
     }
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class, 'library_id', 'id');
+    }
 }

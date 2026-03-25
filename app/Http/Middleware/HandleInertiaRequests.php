@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use App\Models\Link;
+use App\Models\Plan;
 use App\Models\PostCategory;
+use App\Models\Subscription;
 use App\Models\WebsiteInfo;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
@@ -52,6 +54,7 @@ class HandleInertiaRequests extends Middleware
                 'permissions' => $request->user() ? $request->user()->getAllPermissions()->pluck('name') : [],
             ],
             'user_library' => $request->user()?->library ?? [],
+            'user_active_plan' => Subscription::where('library_id', $request->user()->library_id)->orderByDesc('id')->where('status', 'active')->with('plan')->first() ?? null,
             'flash' => function () use ($request) {
                 return [
                     'success' => $request->session()->get('success'),

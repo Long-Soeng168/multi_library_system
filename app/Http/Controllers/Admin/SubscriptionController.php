@@ -5,11 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Library;
-use App\Models\Page;
-use App\Models\PageImage;
 use App\Models\Plan;
 use App\Models\Subscription;
-use App\Models\Type;
 
 use Illuminate\Http\Request;
 
@@ -23,7 +20,7 @@ class SubscriptionController extends Controller implements HasMiddleware
     {
         return [
             new Middleware('permission:subscription view', only: ['index', 'show']),
-            new Middleware('permission:subscription create', only: ['create', 'store']),
+            new Middleware('permission:subscription create', only: ['create']),
             new Middleware('permission:subscription update', only: ['edit', 'update', 'recover']),
             new Middleware('permission:subscription delete', only: ['destroy', 'destroy_image']),
         ];
@@ -105,6 +102,22 @@ class SubscriptionController extends Controller implements HasMiddleware
             'libraries' => Library::orderBy('name')->get(),
         ]);
     }
+    public function subscribe_to_plan(Request $request)
+    {
+        $selected_plan = Plan::findOrFail($request->plan_id);
+        $selected_library = Library::find($request->user()->library_id);
+
+        if (!$selected_library) {
+            return redirect('/create-library');
+        }
+
+        return Inertia::render('Admin/Subscription/Create', [
+            'plans' => Plan::orderBy('order_index')->get(['id', 'name', 'price', 'billing_cycle']),
+            'libraries' => Library::orderBy('name')->get(),
+            'selected_plan' => $selected_plan,
+            'selected_library' => $selected_library,
+        ]);
+    }
 
     public function store(Request $request)
     {
@@ -117,6 +130,7 @@ class SubscriptionController extends Controller implements HasMiddleware
             'started_at' => 'nullable|date',
             'expires_at' => 'nullable|date|after_or_equal:started_at',
 
+            'payment_proof_image' => 'nullable|mimes:jpeg,png,jpg,gif,webp,svg|max:4096',
         ]);
 
         try {
@@ -137,6 +151,15 @@ class SubscriptionController extends Controller implements HasMiddleware
             // ✅ Audit
             $validated['created_by'] = $request->user()->id;
             $validated['updated_by'] = $request->user()->id;
+
+            if ($request->hasFile('payment_proof_image')) {
+                $payment_proof_imageName = ImageHelper::uploadAndResizeImageWebp(
+                    $request->file('payment_proof_image'),
+                    'assets/images/subscriptions',
+                    600
+                );
+                $validated['payment_proof_image'] = $payment_proof_imageName;
+            }
 
             Subscription::create($validated);
 
@@ -184,6 +207,8 @@ class SubscriptionController extends Controller implements HasMiddleware
             'started_at' => 'nullable|date',
             'expires_at' => 'nullable|date|after_or_equal:started_at',
 
+            'payment_proof_image' => 'nullable|mimes:jpeg,png,jpg,gif,webp,svg|max:4096',
+
         ]);
 
         try {
@@ -210,6 +235,23 @@ class SubscriptionController extends Controller implements HasMiddleware
                     ->where('id', '!=', $subscription->id)
                     ->where('status', 'active')
                     ->update(['status' => 'expired']);
+            }
+
+            $payment_proof_imageFile = $request->file('payment_proof_image');
+            unset($validated['payment_proof_image']);
+            if ($payment_proof_imageFile) {
+                $payment_proof_imageName = ImageHelper::uploadAndResizeImageWebp(
+                    $payment_proof_imageFile,
+                    'assets/images/subscriptions',
+                    1440,
+                );
+
+                $validated['payment_proof_image'] = $payment_proof_imageName;
+
+                // delete old if replaced
+                if ($payment_proof_imageName && $subscription->payment_proof_image) {
+                    ImageHelper::deleteImage($subscription->payment_proof_image, 'assets/images/subscriptions');
+                }
             }
 
             $subscription->update($validated);

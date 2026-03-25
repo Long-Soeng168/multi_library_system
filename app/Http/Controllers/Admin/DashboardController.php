@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\ItemDownloadCount;
 use App\Models\ItemReadCount;
 use App\Models\ItemView;
+use App\Models\Library;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -26,8 +29,30 @@ class DashboardController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $user = $request->user();
+        $isLibraryStaff = false;
+        $hasGlobalPermission = $user->hasAnyPermission(['item view']);
+        $library_code = $user?->library?->code;
+        if ($library_code) {
+            $currentUsedLibrary = Library::where('code', $library_code)->firstOrFail();
+            $isLibraryStaff = ($user->library_id === $currentUsedLibrary->id) &&
+                in_array($user->library_role, ['Owner', 'Staff']);
+        }
+        if ($isLibraryStaff) {
+            return Inertia::render('dashboard', [
+                'chartDataViews' => [],
+                'chartDataReads' => [],
+                'chartDataDownloads' => [],
+            ]);
+        } else if ($hasGlobalPermission) {
+            // ...
+        } else {
+            // abort(403, 'You do not have permission to view this.');
+        }
+
+        
         $start = now()->subDays(90)->startOfDay();
         $end = now()->startOfDay();
 
@@ -85,6 +110,8 @@ class DashboardController extends Controller implements HasMiddleware
 
         $chartDataDownloads = $buildChartData($rawDownloads, $start, $end);
 
+        // $user_active_plan = Subscription::where('library_id', Auth::user()->library_id)->orderByDesc('id')->where('status', 'active')->with('plan')->first() ?? [];
+        // return $user_active_plan;
         // Return all chart data to Inertia
         return Inertia::render('dashboard', [
             'chartDataViews' => $chartDataViews,
