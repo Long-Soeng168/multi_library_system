@@ -82,33 +82,22 @@ export default function Create({ editData, readOnly }: { editData?: any; readOnl
                 {selected_plan?.id && (
                     <div
                         key={selected_plan?.id}
-                        className={`relative flex flex-col rounded-2xl border p-6 transition-all duration-300 hover:shadow-md ${
-                            selected_plan?.is_popular === 1
-                                ? 'border-primary bg-card shadow-lg ring-2 ring-primary/10'
-                                : 'border-border bg-card shadow-sm'
-                        }`}
+                        className={`relative flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-md`}
                     >
-                        {/* Popular Badge */}
-                        {selected_plan?.is_popular === 1 && (
-                            <div className="absolute -top-3 right-6 rounded-full bg-primary px-3 py-1 text-[10px] font-bold tracking-widest text-primary-foreground uppercase shadow-sm">
-                                {t('Popular')}
-                            </div>
-                        )}
-
                         {/* Header Section */}
-                        <div className="mb-8 flex items-start justify-between gap-4">
+                        <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
                             <div className="space-y-1">
                                 <h3 className="text-xl font-bold tracking-tight text-foreground">
                                     {currentLocale === 'kh' && selected_plan?.name_kh ? selected_plan.name_kh : selected_plan?.name}
                                 </h3>
+                            </div>
+                            <div className="flex items-center gap-2 text-right">
+                                <span className="text-3xl font-black tracking-tighter text-primary">
+                                    {Number(selected_plan?.price) === 0 ? t('Free') : `$${Number(selected_plan?.price).toFixed(0)}`}
+                                </span>
                                 <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                     {selected_plan?.billing_cycle_label}
                                 </p>
-                            </div>
-                            <div className="text-right">
-                                <span className="text-3xl font-black tracking-tighter text-foreground">
-                                    {Number(selected_plan?.price) === 0 ? t('Free') : `$${Number(selected_plan?.price).toFixed(0)}`}
-                                </span>
                             </div>
                         </div>
 
@@ -211,6 +200,7 @@ export default function Create({ editData, readOnly }: { editData?: any; readOnl
                         options={[
                             { value: 'pending', label: 'Pending' },
                             { value: 'active', label: 'Active' },
+                            { value: 'rejected', label: 'Rejected' },
                             { value: 'expired', label: 'Expired' },
                             { value: 'canceled', label: 'Canceled' },
                         ]}

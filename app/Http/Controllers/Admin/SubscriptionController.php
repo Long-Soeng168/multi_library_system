@@ -19,22 +19,39 @@ class SubscriptionController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:subscription view', only: ['index', 'show']),
+            // new Middleware('permission:subscription view', only: ['index', 'show']),
             new Middleware('permission:subscription create', only: ['create']),
             new Middleware('permission:subscription update', only: ['edit', 'update', 'recover']),
             new Middleware('permission:subscription delete', only: ['destroy', 'destroy_image']),
         ];
     }
 
-    public function index(Request $request)
+    public function index(Request $request, $library_code = null)
     {
         $perPage = $request->input('perPage', 10);
         $search = $request->input('search', '');
         $sortBy = $request->input('sortBy', 'id');
         $sortDirection = $request->input('sortDirection', 'desc');
         $trashed = $request->input('trashed'); // '', 'with', 'only'
+        $library_id = $request->input('library_id');
 
         $query = Subscription::query();
+
+        $user = $request->user();
+        $isLibraryStaff = false;
+        $hasGlobalPermission = $user->hasAnyPermission(['subscription view']);
+        if ($library_code) {
+            $currentUsedLibrary = Library::where('code', $library_code)->firstOrFail();
+            $isLibraryStaff = ($user->library_id === $currentUsedLibrary->id) &&
+                in_array($user->library_role, ['Owner', 'Staff']);
+        }
+        if ($isLibraryStaff) {
+            $library_id = $currentUsedLibrary?->id;
+        } else if ($hasGlobalPermission) {
+            // ...
+        } else {
+            abort(403, 'You do not have permission to view this.');
+        }
 
         // ✅ Soft deletes filter
         if ($trashed === 'with') {
@@ -49,8 +66,8 @@ class SubscriptionController extends Controller implements HasMiddleware
         if ($request->plan_id) {
             $query->where('plan_id', $request->plan_id);
         }
-        if ($request->library_id) {
-            $query->where('library_id', $request->library_id);
+        if ($library_id) {
+            $query->where('library_id', $library_id);
         }
 
         // ✅ Search (library, plan, status, etc.)
@@ -125,10 +142,10 @@ class SubscriptionController extends Controller implements HasMiddleware
             'library_id' => 'required|exists:libraries,id',
             'plan_id' => 'required|exists:plans,id',
 
-            'status' => 'required|in:active,pending,expired,canceled',
+            'status' => 'required|in:rejected,active,pending,expired,canceled',
 
             'started_at' => 'nullable|date',
-            'expires_at' => 'nullable|date|after_or_equal:started_at',
+            'expires_at' => 'nullable|date',
 
             'payment_proof_image' => 'nullable|mimes:jpeg,png,jpg,gif,webp,svg|max:4096',
         ]);
@@ -202,10 +219,10 @@ class SubscriptionController extends Controller implements HasMiddleware
             'library_id' => 'required|exists:libraries,id',
             'plan_id' => 'required|exists:plans,id',
 
-            'status' => 'required|in:active,pending,expired,canceled',
+            'status' => 'required|in:rejected,active,pending,expired,canceled',
 
             'started_at' => 'nullable|date',
-            'expires_at' => 'nullable|date|after_or_equal:started_at',
+            'expires_at' => 'nullable|date',
 
             'payment_proof_image' => 'nullable|mimes:jpeg,png,jpg,gif,webp,svg|max:4096',
 
@@ -228,14 +245,6 @@ class SubscriptionController extends Controller implements HasMiddleware
 
             // ✅ Audit
             $validated['updated_by'] = $request->user()->id;
-
-            // 🔥 Optional: prevent multiple active subscriptions
-            if ($validated['status'] === 'active') {
-                Subscription::where('library_id', $validated['library_id'])
-                    ->where('id', '!=', $subscription->id)
-                    ->where('status', 'active')
-                    ->update(['status' => 'expired']);
-            }
 
             $payment_proof_imageFile = $request->file('payment_proof_image');
             unset($validated['payment_proof_image']);

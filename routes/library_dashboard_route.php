@@ -101,6 +101,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('types', TypeController::class);
         Route::post('types/{type}/update', [TypeController::class, 'update']);
         Route::post('types/{id}/recover', [TypeController::class, 'recover']);
+
+        Route::resource('subscriptions', SubscriptionController::class);
     });
     
     Route::get('/subscribe-to-plan', [SubscriptionController::class, 'subscribe_to_plan']);

@@ -1,6 +1,7 @@
 import ExportButton from '@/components/Button/ExportButton';
 import NewItemButton from '@/components/Button/NewItemButton';
 import RefreshButton from '@/components/Button/RefreshButton';
+import LimitReachedDialog from '@/components/Dialog/LimitReachedDialog';
 import FilterByLibrary from '@/components/Filter/FilterByLibrary';
 import PaginationTabs from '@/components/Pagination/PaginationTabs';
 import TableDataSearch from '@/components/Search/TableDataSearch';
@@ -13,9 +14,8 @@ import FilterRole from './FilterRole';
 import TableData from './TableData';
 
 const Index = () => {
-    const { user_library } = usePage<any>().props;
+    const { user_library, user_active_plan } = usePage<any>().props;
     const hasPermission = usePermission();
-
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/dashboard' },
         {
@@ -35,10 +35,14 @@ const Index = () => {
                     <div className="flex w-full justify-end gap-2 md:w-auto">
                         {/* Add New Dialog */}
                         <ExportButton endpoint="/users-export" />
-                        <NewItemButton
-                            url={hasPermission('user view') ? '/admin/users/create' : `/dashboard/library/${user_library?.code}/users/create`}
-                            permission=""
-                        />
+                        {!hasPermission('item view') && user_library?.items_count >= user_active_plan?.plan?.max_books ? (
+                            <LimitReachedDialog />
+                        ) : (
+                            <NewItemButton
+                                url={hasPermission('user view') ? '/admin/users/create' : `/dashboard/library/${user_library?.code}/users/create`}
+                                permission=""
+                            />
+                        )}
                     </div>
                 </div>
                 <FilterByLibrary />

@@ -7,6 +7,7 @@ use App\Models\ItemDownloadCount;
 use App\Models\ItemReadCount;
 use App\Models\ItemView;
 use App\Models\Library;
+use App\Models\Plan;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 
@@ -35,12 +36,22 @@ class DashboardController extends Controller implements HasMiddleware
         $isLibraryStaff = false;
         $hasGlobalPermission = $user->hasAnyPermission(['item view']);
         $library_code = $user?->library?->code;
-        if ($library_code) {
-            $currentUsedLibrary = Library::where('code', $library_code)->firstOrFail();
+        $currentUsedLibrary = Library::where('code', $library_code)->first();
+        if ($library_code && $currentUsedLibrary) {
             $isLibraryStaff = ($user->library_id === $currentUsedLibrary->id) &&
                 in_array($user->library_role, ['Owner', 'Staff']);
         }
         if ($isLibraryStaff) {
+            $vip_active_plan = Subscription::where('library_id', $currentUsedLibrary->id)
+                ->where('status', 'active')
+                ->whereNotNull('expires_at')
+                ->first();
+
+            if ($vip_active_plan && now()->greaterThan($vip_active_plan->expires_at)) {
+                $vip_active_plan->update([
+                    'status' => 'expired',
+                ]);
+            }
             return Inertia::render('dashboard', [
                 'chartDataViews' => [],
                 'chartDataReads' => [],
@@ -52,7 +63,7 @@ class DashboardController extends Controller implements HasMiddleware
             // abort(403, 'You do not have permission to view this.');
         }
 
-        
+
         $start = now()->subDays(90)->startOfDay();
         $end = now()->startOfDay();
 

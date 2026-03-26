@@ -53,8 +53,8 @@ class HandleInertiaRequests extends Middleware
                 'roles' => $request->user() ? $request->user()->getRoleNames() : [],
                 'permissions' => $request->user() ? $request->user()->getAllPermissions()->pluck('name') : [],
             ],
-            'user_library' => $request->user()?->library ?? [],
-            'user_active_plan' => Subscription::where('library_id', $request->user()->library_id)->orderByDesc('id')->where('status', 'active')->with('plan')->first() ?? null,
+            'user_library' => $request->user()?->library?->loadCount('items') ?? [],
+            'user_active_plan' => Subscription::where('library_id', $request->user()?->library_id)->orderByDesc('id')->where('status', 'active')->with('plan')->first() ?? null,
             'flash' => function () use ($request) {
                 return [
                     'success' => $request->session()->get('success'),

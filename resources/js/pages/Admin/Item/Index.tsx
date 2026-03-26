@@ -1,6 +1,7 @@
 import ExportButton from '@/components/Button/ExportButton';
 import NewItemButton from '@/components/Button/NewItemButton';
 import RefreshButton from '@/components/Button/RefreshButton';
+import LimitReachedDialog from '@/components/Dialog/LimitReachedDialog';
 import FilterByLibrary from '@/components/Filter/FilterByLibrary';
 import PaginationTabs from '@/components/Pagination/PaginationTabs';
 import TableDataSearch from '@/components/Search/TableDataSearch';
@@ -13,7 +14,7 @@ import FilterMainCategory from './FilterMainCategory';
 import TableData from './TableData';
 
 const Index = () => {
-    const { user_library } = usePage<any>().props;
+    const { user_library, user_active_plan } = usePage<any>().props;
     const hasPermission = usePermission();
 
     const breadcrumbs: BreadcrumbItem[] = [
@@ -36,14 +37,18 @@ const Index = () => {
                     <div className="flex w-full justify-end gap-2 md:w-auto">
                         {/* Add New Dialog */}
                         <ExportButton endpoint="/items-export" label="Export Excel" />
-                        <NewItemButton
-                            url={
-                                hasPermission('item view')
-                                    ? `/admin/items/create?main_category_code=${main_category_code || ''}`
-                                    : `/dashboard/library/${user_library?.code}/items/create?main_category_code=${main_category_code || ''}`
-                            }
-                            permission=""
-                        />
+                        {!hasPermission('item view') && user_library?.items_count >= user_active_plan?.plan?.max_books ? (
+                            <LimitReachedDialog />
+                        ) : (
+                            <NewItemButton
+                                url={
+                                    hasPermission('item view')
+                                        ? `/admin/items/create?main_category_code=${main_category_code || ''}`
+                                        : `/dashboard/library/${user_library?.code}/items/create?main_category_code=${main_category_code || ''}`
+                                }
+                                permission=""
+                            />
+                        )}
                     </div>
                 </div>
                 <FilterByLibrary />

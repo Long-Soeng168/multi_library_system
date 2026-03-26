@@ -9,6 +9,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import {
     ArrowLeftRightIcon,
+    CreditCardIcon,
     ExternalLinkIcon,
     LayoutList,
     LibraryIcon,
@@ -178,6 +179,13 @@ export default function Dashboard() {
                     permission: '',
                 },
             ],
+        },
+        {
+            title: 'Subscriptions',
+            url: `/dashboard/library/${libCode}/subscriptions`,
+            icon: CreditCardIcon,
+            activeList: [`/dashboard/library/${libCode}/subscriptions`],
+            permission: '',
         },
     ];
 

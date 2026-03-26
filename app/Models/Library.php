@@ -22,4 +22,8 @@ class Library extends Model
     {
         return $this->hasMany(Subscription::class, 'library_id', 'id');
     }
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'library_id', 'id');
+    }
 }

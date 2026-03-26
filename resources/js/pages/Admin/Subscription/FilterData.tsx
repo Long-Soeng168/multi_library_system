@@ -70,6 +70,7 @@ const FilterData = () => {
         { value: '', label: t('All') },
         { value: 'active', label: t('Active') },
         { value: 'pending', label: t('Pending') },
+        { value: 'rejected', label: t('Rejected') },
         { value: 'expired', label: t('Expired') },
         { value: 'canceled', label: t('Canceled') },
     ];

@@ -8,6 +8,7 @@ import TableCellDate from '@/components/Table/TableCellDate';
 import TableCellText from '@/components/Table/TableCellText';
 import TableHeadWithSort from '@/components/Table/TableHeadWithSort';
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table';
+import usePermission from '@/hooks/use-permission';
 import { cn } from '@/lib/utils';
 import { usePage } from '@inertiajs/react';
 
@@ -24,11 +25,15 @@ const TableData = () => {
             case 'expired':
                 return `${base} bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300`;
             case 'canceled':
+                return `${base} bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300`;
+            case 'rejected':
                 return `${base} bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300`;
             default:
                 return `${base} bg-muted text-muted-foreground`;
         }
     };
+    const hasPermission = usePermission();
+
     return (
         <>
             <div className="table-data-container">
@@ -36,9 +41,13 @@ const TableData = () => {
                     <TableHeader className="table-header">
                         <TableRow>
                             <TableHeadWithSort field="id" label="ID" />
-                            <TableHeadWithSort label="Action" />
+                            {hasPermission('subscription view') && (
+                                <>
+                                    <TableHeadWithSort label="Action" />
+                                    <TableHeadWithSort field="library" label="Library" />
+                                </>
+                            )}
 
-                            <TableHeadWithSort field="library" label="Library" />
                             <TableHeadWithSort field="plan" label="Plan" />
                             <TableHeadWithSort field="status" label="Status" />
 
@@ -47,8 +56,12 @@ const TableData = () => {
 
                             <TableHeadWithSort field="created_at" label="Created at" />
                             <TableHeadWithSort field="created_by" label="Created by" />
-                            <TableHeadWithSort field="updated_at" label="Updated at" />
-                            <TableHeadWithSort field="updated_by" label="Updated by" />
+                            {hasPermission('subscription view') && (
+                                <>
+                                    <TableHeadWithSort field="updated_at" label="Updated at" />
+                                    <TableHeadWithSort field="updated_by" label="Updated by" />
+                                </>
+                            )}
                         </TableRow>
                     </TableHeader>
 
@@ -58,26 +71,34 @@ const TableData = () => {
                                 <TableCellText value={item.id} />
 
                                 {/* Actions */}
-                                <TableCellActions>
-                                    {item.deleted_at ? (
-                                        <RecoverItem
-                                            deleted_at={item.deleted_at}
-                                            recoverPath={`/admin/subscriptions/${item.id}/recover`}
-                                            permission="subscription update"
-                                        />
-                                    ) : (
-                                        <>
-                                            <EditItemButton url={`/admin/subscriptions/${item.id}/edit`} permission="subscription update" />
+                                {hasPermission('subscription view') && (
+                                    <>
+                                        <TableCellActions>
+                                            {item.deleted_at ? (
+                                                <RecoverItem
+                                                    deleted_at={item.deleted_at}
+                                                    recoverPath={`/admin/subscriptions/${item.id}/recover`}
+                                                    permission="subscription update"
+                                                />
+                                            ) : (
+                                                <>
+                                                    <EditItemButton url={`/admin/subscriptions/${item.id}/edit`} permission="subscription update" />
 
-                                            <ViewItemButton url={`/admin/subscriptions/${item.id}`} permission="subscription view" />
+                                                    <ViewItemButton url={`/admin/subscriptions/${item.id}`} permission="subscription view" />
 
-                                            <DeleteItemButton deletePath="/admin/subscriptions/" id={item.id} permission="subscription delete" />
-                                        </>
-                                    )}
-                                </TableCellActions>
+                                                    <DeleteItemButton
+                                                        deletePath="/admin/subscriptions/"
+                                                        id={item.id}
+                                                        permission="subscription delete"
+                                                    />
+                                                </>
+                                            )}
+                                        </TableCellActions>
+                                        <TableCellText value={item.library?.name} />
+                                    </>
+                                )}
 
                                 {/* Relations */}
-                                <TableCellText value={item.library?.name} />
                                 <TableCellText value={item.plan?.name} />
 
                                 {/* Status */}
@@ -92,8 +113,12 @@ const TableData = () => {
                                 {/* Audit */}
                                 <TableCellDate value={item.created_at} />
                                 <TableCellText value={item.created_user?.name} />
-                                <TableCellDate value={item.updated_at} />
-                                <TableCellText value={item.updated_user?.name} />
+                                {hasPermission('subscription view') && (
+                                    <>
+                                        <TableCellDate value={item.updated_at} />
+                                        <TableCellText value={item.updated_user?.name} />
+                                    </>
+                                )}
                             </TableRow>
                         ))}
                     </TableBody>

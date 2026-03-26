@@ -12,7 +12,7 @@ export default function ExportButton({ endpoint = '#', label = 'Export Excel', c
     const { t } = useTranslation();
 
     return (
-        <Button variant="secondary" className={cn('h-11 border duration-300 hover:border-primary', className)} onClick={handleExport}>
+        <Button variant="secondary" className={cn('h-11 hidden border duration-300 hover:border-primary', className)} onClick={handleExport}>
             <FileUpIcon /> {t(label)}
         </Button>
     );
