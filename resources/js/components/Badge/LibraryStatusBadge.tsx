@@ -54,6 +54,13 @@ const LibraryStatusBadge = () => {
             icon: Ban,
             pulse: false,
         },
+        rejected: {
+            container:
+                'bg-red-500/10 dark:bg-red-400/10 text-red-600 dark:text-red-400 border-red-500/20 dark:border-red-400/30 ring-red-400/20',
+            ring: 'bg-red-400 dark:bg-red-500',
+            icon: Ban,
+            pulse: false,
+        },
         default: {
             container:
                 'bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 border-blue-500/20 dark:border-blue-500/40 ring-blue-500/20',

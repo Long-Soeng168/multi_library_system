@@ -4,24 +4,27 @@ import RefreshButton from '@/components/Button/RefreshButton';
 import FilterByLibrary from '@/components/Filter/FilterByLibrary';
 import PaginationTabs from '@/components/Pagination/PaginationTabs';
 import TableDataSearch from '@/components/Search/TableDataSearch';
+import usePermission from '@/hooks/use-permission';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { usePage } from '@inertiajs/react';
 import FilterMainCategory from '../Item/FilterMainCategory';
 import FilterData from './FilterData';
-import HelpDialog from './HelpDialog';
 import TableData from './TableData';
 
 const Index = () => {
+    const { user_library, user_active_plan } = usePage<any>().props;
+    const hasPermission = usePermission();
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/dashboard' },
         {
             title: 'Items',
-            href: '/admin/items',
+            href: hasPermission('item view') ? '/admin/items' : `/dashboard/library/${user_library?.code}/items`,
         },
         {
             title: 'Categories',
-            href: '/admin/item-categories',
+            href: hasPermission('item view') ? '/admin/item-categories' : `/dashboard/library/${user_library?.code}/item-categories'`,
         },
     ];
     const { filteredCategory, main_category_code } = usePage<any>().props;
@@ -33,19 +36,19 @@ const Index = () => {
                         <FilterData />
                         <TableDataSearch />
                         <RefreshButton />
-                        <HelpDialog />
+                        {/* <HelpDialog /> */}
                     </div>
                     <div className="flex w-full justify-end md:w-auto">
                         {/* Add New Dialog */}
                         <NewItemButton
                             url={`/admin/item-categories/create?${filteredCategory?.id ? 'filtered_category_id=' + filteredCategory?.id : ''}&${main_category_code ? 'main_category_code=' + main_category_code : ''}`}
-                            permission="item_category create"
+                            permission=""
                         />
                     </div>
                 </div>
                 <FilterByLibrary />
                 <FilterMainCategory />
-                <CategoryBreadcrumb path="/admin/item-categories" />
+                {hasPermission('item view') && <CategoryBreadcrumb path="/admin/item-categories" />}
                 <TableData />
                 <PaginationTabs />
             </>

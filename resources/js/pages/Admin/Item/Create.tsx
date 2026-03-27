@@ -382,7 +382,7 @@ export default function Create({ libraries, editData, readOnly }: { libraries: a
                 </div>
                 {inputLanguage == 'default' && (
                     <span className="space-y-6 md:grid md:grid-cols-2 md:gap-x-6">
-                        <FormCombobox
+                        {/* <FormCombobox
                             name="main_category_code"
                             label="Main Category"
                             disable={!data.library_id}
@@ -408,21 +408,21 @@ export default function Create({ libraries, editData, readOnly }: { libraries: a
                             }}
                             error={errors.main_category_code}
                             description="Select the Main Category that this category belongs to."
-                        />
+                        /> */}
                         <FormCombobox
                             name="category_code"
                             label="Category"
                             options={[
                                 {
                                     value: null,
-                                    label: !data.main_category_code ? t('Please Select Main Category') : t('NA'),
+                                    label: t('NA'),
                                 },
-                                ...filteredCategories.map((item: any) => ({
+                                ...categories.map((item: any) => ({
                                     value: item.code,
                                     label: `(${item.order_index}) ` + (currentLocale == 'kh' ? item.name_kh || item.name : item.name),
                                 })),
                             ]}
-                            disable={!data.library_id || !data.main_category_code}
+                            // disable={!data.library_id || !data.main_category_code}
                             placeholder={
                                 !data.library_id
                                     ? 'Please Select Library First.'

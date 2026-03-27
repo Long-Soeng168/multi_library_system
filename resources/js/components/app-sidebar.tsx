@@ -358,12 +358,23 @@ export function AppSidebar() {
             title: 'Items',
             url: `/dashboard/library/${libCode}/items`,
             icon: LayoutList,
-            activeList: [`/dashboard/library/${libCode}/items`, `/dashboard/library/${libCode}/items-physical-copies`],
+            activeList: [
+                `/dashboard/library/${libCode}/items`,
+                `/dashboard/library/${libCode}/item-categories`,
+                `/dashboard/library/${libCode}/items-physical-copies`,
+                `/dashboard/library/${libCode}/item-types`,
+                `/dashboard/library/${libCode}/shelf-locations`,
+            ],
             permission: '',
             items: [
                 {
                     title: 'All Items',
                     url: `/dashboard/library/${libCode}/items`,
+                    permission: '',
+                },
+                {
+                    title: 'Item Categories',
+                    url: `/dashboard/library/${libCode}/item-categories`,
                     permission: '',
                 },
                 {

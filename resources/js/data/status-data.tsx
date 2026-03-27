@@ -24,13 +24,18 @@ export const LIBRARY_STATUS_OPTIONS = [
         description: 'The library is live and fully operational.',
     },
     {
+        value: 'rejected',
+        label: 'Rejected',
+        // description: 'Access is temporarily disabled due to maintenance or policy issues.',
+    },
+    {
         value: 'suspended',
         label: 'Suspended',
         description: 'Access is temporarily disabled due to maintenance or policy issues.',
     },
-    {
-        value: 'expired',
-        label: 'Expired',
-        description: 'The library subscription or listing has ended.',
-    },
+    // {
+    //     value: 'expired',
+    //     label: 'Expired',
+    //     description: 'The library subscription or listing has ended.',
+    // },
 ];

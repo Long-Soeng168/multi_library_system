@@ -20,16 +20,16 @@ class ItemCategoryController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:item_category view', only: ['index', 'show']),
-            new Middleware('permission:item_category create', only: ['create', 'store']),
-            new Middleware('permission:item_category update', only: ['edit', 'update', 'recover']),
-            new Middleware('permission:item_category delete', only: ['destroy', 'destroy_image']),
+            // new Middleware('permission:item_category view', only: ['index', 'show']),
+            // new Middleware('permission:item_category create', only: ['create', 'store']),
+            // new Middleware('permission:item_category update', only: ['edit', 'update', 'recover']),
+            // new Middleware('permission:item_category delete', only: ['destroy', 'destroy_image']),
         ];
     }
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, $library_code = null)
     {
         $perPage = $request->input('perPage', 10);
         $search = $request->input('search', '');
@@ -41,6 +41,22 @@ class ItemCategoryController extends Controller implements HasMiddleware
         $library_id = $request->input('library_id', '');
 
         $query = ItemCategory::query();
+
+        $user = $request->user();
+        $isLibraryStaff = false;
+        $hasGlobalPermission = $user->hasAnyPermission(['item view']);
+        if ($library_code) {
+            $currentUsedLibrary = Library::where('code', $library_code)->firstOrFail();
+            $isLibraryStaff = ($user->library_id === $currentUsedLibrary->id) &&
+                in_array($user->library_role, ['Owner', 'Staff']);
+        }
+        if ($isLibraryStaff) {
+            $library_id = $currentUsedLibrary?->id;
+        } else if ($hasGlobalPermission) {
+            // ...
+        } else {
+            abort(403, 'You do not have permission to view this.');
+        }
 
         if ($library_id) {
             $query->where('library_id', $library_id);
@@ -88,6 +104,9 @@ class ItemCategoryController extends Controller implements HasMiddleware
         $tableData = $query->paginate($perPage)->onEachSide(1);
 
         $categories = ItemCategory::where('parent_id', null)
+            ->when($library_id, function ($query) use ($library_id) {
+                $query->where('library_id', $library_id);
+            })
             ->where('item_main_category_code', $main_category_code)
             ->orderBy('order_index')
             ->withCount('items')
@@ -96,12 +115,16 @@ class ItemCategoryController extends Controller implements HasMiddleware
         // return $filteredCategory;
         return Inertia::render('Admin/ItemCategory/Index', [
             'tableData' => $tableData,
-            'parents' => ItemCategory::where('parent_id', null)->orderBy('order_index')->orderBy('id', 'desc')->get(),
+            'parents' => ItemCategory::where('parent_id', null)->when($library_id, function ($query) use ($library_id) {
+                $query->where('library_id', $library_id);
+            })->orderBy('order_index')->orderBy('id', 'desc')->get(),
             'filteredCategory' => $filteredCategory,
             'allParents' => $filteredParents,
             'main_category_code' => $main_category_code,
             'categories' => $categories,
-            'mainCategories' => ItemMainCategory::orderBy('order_index')
+            'mainCategories' => ItemMainCategory::when($library_id, function ($query) use ($library_id) {
+                $query->where('library_id', $library_id);
+            })->orderBy('order_index')
                 ->withCount('items')
                 ->orderBy('name')
                 ->get(),
@@ -172,8 +195,33 @@ class ItemCategoryController extends Controller implements HasMiddleware
     /**
      * Display the specified resource.
      */
-    public function show(ItemCategory $item_category)
+    public function show(Request $request, $param1, $param2 = null)
     {
+        if ($param2) {
+            $library_code = $param1;
+            $item_category_id = $param2;
+        } else {
+            $library_code = null;
+            $item_category_id = $param1;
+        }
+        $item_category = ItemCategory::findOrFail($item_category_id);
+        $library_id = $request->input('library_id', '');
+
+        $user = $request->user();
+        $isLibraryStaff = false;
+        $hasGlobalPermission = $user->hasAnyPermission(['item view']);
+        if ($library_code) {
+            $currentUsedLibrary = Library::where('code', $library_code)->firstOrFail();
+            $isLibraryStaff = ($user->library_id === $currentUsedLibrary->id) &&
+                in_array($user->library_role, ['Owner', 'Staff']);
+        }
+        if ($isLibraryStaff) {
+            $library_id = $currentUsedLibrary?->id;
+        } else if ($hasGlobalPermission) {
+            // ...
+        } else {
+            abort(403, 'You do not have permission to view this.');
+        }
         return Inertia::render('Admin/ItemCategory/Create', [
             'editData' => $item_category,
             'readOnly' => true,
@@ -185,8 +233,34 @@ class ItemCategoryController extends Controller implements HasMiddleware
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ItemCategory $item_category)
+    public function edit(Request $request, $param1, $param2 = null)
     {
+        if ($param2) {
+            $library_code = $param1;
+            $item_category_id = $param2;
+        } else {
+            $library_code = null;
+            $item_category_id = $param1;
+        }
+        $item_category = ItemCategory::findOrFail($item_category_id);
+        $library_id = $request->input('library_id', '');
+
+        $user = $request->user();
+        $isLibraryStaff = false;
+        $hasGlobalPermission = $user->hasAnyPermission(['item view']);
+        if ($library_code) {
+            $currentUsedLibrary = Library::where('code', $library_code)->firstOrFail();
+            $isLibraryStaff = ($user->library_id === $currentUsedLibrary->id) &&
+                in_array($user->library_role, ['Owner', 'Staff']);
+        }
+        if ($isLibraryStaff) {
+            $library_id = $currentUsedLibrary?->id;
+        } else if ($hasGlobalPermission) {
+            // ...
+        } else {
+            abort(403, 'You do not have permission to view this.');
+        }
+        
         return Inertia::render('Admin/ItemCategory/Create', [
             'editData' => $item_category,
             'mainCategories' => ItemMainCategory::orderBy('order_index')->orderBy('id', 'desc')->get(),

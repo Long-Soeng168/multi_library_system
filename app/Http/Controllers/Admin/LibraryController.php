@@ -126,7 +126,7 @@ class LibraryController extends Controller implements HasMiddleware
             'opening_days' => 'nullable|string',
 
             // Status & Ownership
-            'status' => 'required|in:active,in_review,suspended,expired',
+            'status' => 'required|in:active,in_review,suspended,rejected',
             'owner_id' => 'nullable|exists:users,id',
         ]);
 
@@ -260,7 +260,7 @@ class LibraryController extends Controller implements HasMiddleware
             'opening_days' => 'nullable|string',
 
             // Status & Ownership
-            'status' => 'required|in:active,in_review,suspended,expired',
+            'status' => 'required|in:active,in_review,suspended,rejected',
             'owner_id' => 'nullable|exists:users,id',
         ]);
 

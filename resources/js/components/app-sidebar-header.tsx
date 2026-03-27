@@ -25,7 +25,7 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
                         <AppLogo />
                     </div>
                     <div className="flex flex-wrap items-center justify-end gap-2">
-                        <LibraryStatusBadge />
+                        {/* <LibraryStatusBadge /> */}
                         {user_library?.id && (
                             <Link href={'/admin/circulations-checkout'}>
                                 <Button variant="secondary" className="h-9 overflow-hidden rounded-md border hover:border-primary">

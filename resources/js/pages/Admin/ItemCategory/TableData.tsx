@@ -10,10 +10,12 @@ import TableCellDate from '@/components/Table/TableCellDate';
 import TableCellText from '@/components/Table/TableCellText';
 import TableHeadWithSort from '@/components/Table/TableHeadWithSort';
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table';
-import { router, usePage } from '@inertiajs/react';
+import usePermission from '@/hooks/use-permission';
+import { usePage } from '@inertiajs/react';
 
 const TableData = () => {
-    const { tableData, main_category_code } = usePage<any>().props;
+    const { tableData, user_library, main_category_code } = usePage<any>().props;
+    const hasPermission = usePermission();
     return (
         <>
             <div className="table-data-container">
@@ -26,7 +28,7 @@ const TableData = () => {
                             <TableHeadWithSort label="Image" />
                             <TableHeadWithSort field="name" label="Name" />
                             <TableHeadWithSort field="name_kh" label="Name Khmer" />
-                            <TableHeadWithSort field="item_main_category_code" label="Main Category" />
+                            {/* <TableHeadWithSort field="item_main_category_code" label="Main Category" /> */}
                             <TableHeadWithSort field="parent_id" label="Parent Category" />
                             <TableHeadWithSort field="order_index" label="Order Index" />
                             <TableHeadWithSort field="short_description" label="Short Description" />
@@ -42,11 +44,11 @@ const TableData = () => {
                             <TableRow
                                 className="table-row"
                                 key={item.id}
-                                onDoubleClick={() =>
-                                    router.visit(
-                                        `/admin/item-categories?category_code=${item.code}&${item?.item_main_category_code ? 'main_category_code=' + item?.item_main_category_code : ''}`,
-                                    )
-                                }
+                                // onDoubleClick={() =>
+                                //     router.visit(
+                                //         `/admin/item-categories?category_code=${item.code}&${item?.item_main_category_code ? 'main_category_code=' + item?.item_main_category_code : ''}`,
+                                //     )
+                                // }
                             >
                                 <TableCellText value={item.id} />
                                 <TableCellText value={item.library?.name ?? '---'} />
@@ -55,18 +57,32 @@ const TableData = () => {
                                         <RecoverItem
                                             deleted_at={item.deleted_at}
                                             recoverPath={`/admin/item-categories/${item.id}/recover`}
-                                            permission="user update"
+                                            permission=""
                                         />
                                     ) : (
                                         <>
                                             {/* Edit Dialog */}
-                                            <EditItemButton url={`/admin/item-categories/${item.id}/edit`} permission="item_category update" />
+                                            <EditItemButton
+                                                url={
+                                                    hasPermission('item view')
+                                                        ? `/admin/item-categories/${item.id}/edit`
+                                                        : `/dashboard/library/${user_library?.code}/item-categories/${item.id}/edit`
+                                                }
+                                                permission=""
+                                            />
 
                                             {/* View Dialog */}
-                                            <ViewItemButton url={`/admin/item-categories/${item.id}`} permission="item_category view" />
+                                            <ViewItemButton
+                                                url={
+                                                    hasPermission('item view')
+                                                        ? `/admin/item-categories/${item.id}`
+                                                        : `/dashboard/library/${user_library?.code}/item-categories/${item.id}`
+                                                }
+                                                permission=""
+                                            />
 
                                             {/* Delete Item */}
-                                            <DeleteItemButton deletePath="/admin/item-categories/" id={item.id} permission="item_category delete" />
+                                            <DeleteItemButton deletePath="/admin/item-categories/" id={item.id} permission="" />
                                         </>
                                     )}
                                 </TableCellActions>
@@ -79,7 +95,7 @@ const TableData = () => {
                                 </TableCell>
                                 <TableCellText value={item.name} />
                                 <TableCellText value={item.name_kh} />
-                                <TableCellBadge className="uppercase" variant="accent" value={item.item_main_category_code} />
+                                {/* <TableCellBadge className="uppercase" variant="accent" value={item.item_main_category_code} /> */}
                                 <TableCellBadge variant="accent" value={item.parent?.name} />
                                 <TableCellText value={item.order_index} />
                                 <TableCellText value={item.short_description} />

@@ -13,7 +13,7 @@ const FilterMainCategory = () => {
     const params = new URLSearchParams(window.location.search);
     const libraryId = params.get('library_id');
 
-    const [selectedMainCategoryCode, setSelectedMainCategoryCode] = useState<string>(main_category_code || '');
+    const [selectedMainCategoryCode, setSelectedMainCategoryCode] = useState<string>(main_category_code || null);
     const [selectedCategoryCode, setSelectedCategoryCode] = useState<string>('');
     const [selectedSubCategoryCode, setSelectedSubCategoryCode] = useState<string>('');
 
@@ -83,15 +83,15 @@ const FilterMainCategory = () => {
                         setSelectedSubCategoryCode('');
                         applyFilter(val, '', '');
                     }}
-                    className="shrink-0"
+                    className="shrink-0 hidden"
                 />
 
                 {/* Category */}
                 <FormCombobox
                     name="category_code"
                     label="Category"
-                    disable={!selectedMainCategoryCode}
-                    placeholder={!selectedMainCategoryCode ? t('Please Select Main Category First.') : ''}
+                    // disable={!selectedMainCategoryCode}
+                    // placeholder={!selectedMainCategoryCode ? t('Please Select Main Category First.') : ''}
                     options={[
                         {
                             value: null,

@@ -8,6 +8,7 @@ import { FormField } from '@/components/Input/FormField';
 import { FormFieldTextArea } from '@/components/Input/FormFieldTextArea';
 import { ProgressWithValue } from '@/components/ProgressBar/progress-with-value';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import usePermission from '@/hooks/use-permission';
 import useTranslation from '@/hooks/use-translation';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
@@ -34,14 +35,15 @@ export default function Create({ libraries, editData, readOnly }: { libraries: a
         type: 'message',
     });
 
+    const hasPermission = usePermission();
     const [inputLanguage, setInputLanguage] = useState<'default' | 'khmer'>('default');
 
-    const { parents, mainCategories, filtered_category_id, main_category_code } = usePage<any>().props;
+    const { user_library, auth, parents, mainCategories, filtered_category_id, main_category_code } = usePage<any>().props;
 
     const [files, setFiles] = useState<File[] | null>(null);
 
     const { data, setData, post, processing, transform, progress, errors, reset } = useForm<TypeGroupForm>({
-        library_id: editData?.library_id || '',
+        library_id: editData?.library_id || (!hasPermission('item view') && auth?.user?.library_id) || '',
         parent_id: editData?.parent_id?.toString() || filtered_category_id?.toString() || '',
         item_main_category_code: editData?.item_main_category_code?.toString() || main_category_code?.toString() || '',
         name: editData?.name || '',
@@ -78,7 +80,11 @@ export default function Create({ libraries, editData, readOnly }: { libraries: a
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/dashboard' },
         { title: 'Items', href: '/admin/items' },
-        { title: 'Categories', href: '/admin/item-categories' },
+        {
+            title: 'Categories',
+            href: hasPermission('item view') ? '/admin/item-categories' : `/dashboard/library/${user_library?.code}/item-categories`,
+        },
+
         { title: editData?.name || 'Create', href: '#' },
     ];
 
@@ -131,7 +137,7 @@ export default function Create({ libraries, editData, readOnly }: { libraries: a
                     </div>
                 ) : (
                     <div className="form-field-container">
-                        {libraries?.length > 0 && (
+                        {libraries?.length > 0 && hasPermission('item view') && (
                             <div className="col-span-2">
                                 <FormCombobox
                                     name="library_id"
@@ -197,7 +203,7 @@ export default function Create({ libraries, editData, readOnly }: { libraries: a
                 {inputLanguage == 'default' && (
                     <>
                         <div className="form-field-container">
-                            <FormCombobox
+                            {/* <FormCombobox
                                 name="item_main_category_code"
                                 label="Main Category"
                                 required
@@ -220,24 +226,25 @@ export default function Create({ libraries, editData, readOnly }: { libraries: a
                                 }}
                                 error={errors.item_main_category_code}
                                 description="Select the Main Category that this category belongs to."
-                            />
+                                className="hidden"
+                            /> */}
                             <FormCombobox
                                 name="parent_id"
                                 label="Parent"
                                 options={[
                                     {
                                         value: null,
-                                        label: !data.item_main_category_code ? t('Please Select Main Category') : t('NA'),
+                                        label: t('NA'),
                                     },
-                                    ...filteredParents
+                                    ...parents
                                         .filter((item: any) => item.library_id === data?.library_id)
                                         .map((item: any) => ({
                                             value: item.id.toString(),
                                             label: `(${item.order_index}) ${currentLocale === 'kh' ? item.name_kh || item.name : item.name}`,
                                         })),
                                 ]}
-                                disable={!data.item_main_category_code}
-                                placeholder={!data.item_main_category_code ? 'Please Select Main Category First.' : ''}
+                                // disable={!data.item_main_category_code}
+                                // placeholder={!data.item_main_category_code ? 'Please Select Main Category First.' : ''}
                                 value={data.parent_id || ''}
                                 onChange={(val) => setData('parent_id', val)}
                                 error={errors.parent_id}
