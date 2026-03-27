@@ -147,7 +147,7 @@ class SubscriptionController extends Controller implements HasMiddleware
             'started_at' => 'nullable|date',
             'expires_at' => 'nullable|date',
 
-            'payment_proof_image' => 'nullable|mimes:jpeg,png,jpg,gif,webp,svg|max:4096',
+            'payment_proof_image' => 'required|mimes:jpeg,png,jpg,gif,webp,svg|max:4096',
         ]);
 
         try {
