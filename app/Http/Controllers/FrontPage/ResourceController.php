@@ -114,15 +114,28 @@ class ResourceController extends Controller
         $cacheKey = "related_items_{$showData->category_code}_{$id}";
 
         $relatedData = Cache::flexible($cacheKey, [3600, 7200], function () use ($showData, $main_category_code, $id) {
-            $query = Item::query();
-            $query->select('id', 'name', 'name_kh', 'short_description', 'short_description_kh', 'thumbnail', 'category_code', 'created_at');
-
-            return $query->where('category_code', $showData->category_code)
+            $baseQuery = Item::query()
+                ->select('id', 'name', 'name_kh', 'short_description', 'short_description_kh', 'thumbnail', 'category_code', 'created_at')
                 ->where('status', 'published')
-                ->where('main_category_code',  $main_category_code)
-                ->where('id', '!=', $id)
-                ->inRandomOrder()->limit(9)
+                ->where('id', '!=', $id);
+
+            // 1. Attempt to get items in the same category
+            $results = (clone $baseQuery)
+                ->where('category_code', $showData->category_code)
+                ->where('main_category_code', $main_category_code)
+                ->inRandomOrder()
+                ->limit(9)
                 ->get();
+
+            // 2. Fallback: If no related items found, get any published items
+            if ($results->isEmpty()) {
+                return $baseQuery
+                    ->inRandomOrder()
+                    ->limit(9)
+                    ->get();
+            }
+
+            return $results;
         });
 
         // UPDATE VIEW COUNT

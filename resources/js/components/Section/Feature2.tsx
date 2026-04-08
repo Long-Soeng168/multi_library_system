@@ -11,7 +11,7 @@ export default function Feature2() {
             <div className="section-container space-y-12 px-0">
                 {recentItems?.length > 0 && (
                     <div>
-                        <ContentHeader containerClassName="px-3 mb-0" link={`/resources`} title={'Recent Resources'} />
+                        <ContentHeader containerClassName="px-3 mb-0" link={`/resources`} title={t('Recent Resources')} />
 
                         <BookScrollAreaHorizontal items={recentItems} mainCategoryCode={''} />
                     </div>

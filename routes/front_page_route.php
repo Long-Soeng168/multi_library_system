@@ -4,6 +4,7 @@ use App\Http\Controllers\FrontPage\FrontPageController;
 use App\Http\Controllers\FrontPage\PostController;
 use App\Http\Controllers\FrontPage\ResourceController;
 use App\Models\Item;
+use App\Models\Page;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -39,19 +40,28 @@ Route::get('/student-checkin', function () {
 
 
 Route::get('/about', function () {
-    return Inertia::render('FrontPage/About/Index');
+    $showData = Page::where('code', 'about')->first();
+    return Inertia::render('FrontPage/About/Index', [
+        'showData' => $showData,
+    ]);
 });
 Route::get('/contact', function () {
     return Inertia::render('FrontPage/Contact/Index');
 });
 Route::get('/support', function () {
-    return Inertia::render('FrontPage/Support/Index');
+    $showData = Page::where('code', 'support')->first();
+    return Inertia::render('FrontPage/Support/Index', [
+        'showData' => $showData,
+    ]);
 });
 
 Route::get('/pricing', [FrontPageController::class, 'pricing']);
 
 Route::get('/products', function () {
-    return Inertia::render('FrontPage/Products/Index');
+    $showData = Page::where('code', 'products')->first();
+    return Inertia::render('FrontPage/Products/Index', [
+        'showData' => $showData,
+    ]);
 });
 
 Route::get('/our-journey', function () {

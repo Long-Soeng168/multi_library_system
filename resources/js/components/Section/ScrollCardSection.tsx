@@ -8,15 +8,12 @@ import NoDataDisplay from '../NoDataDisplay';
 import { PlaceholderPattern } from '../ui/placeholder-pattern';
 
 export default function ScrollCardSection({ title, containerClassName }: { title?: string; containerClassName?: string }) {
-    const { showData, mainCategory, relatedData } = usePage<any>().props;
+    const { showData, relatedData } = usePage<any>().props;
     const { t, currentLocale } = useTranslation();
     return (
         <div className={cn('section-container', containerClassName)}>
             <div>
-                <ContentHeader
-                    link={`/resources/${mainCategory?.code}?category_code=${showData?.category?.code || ''}`}
-                    title={title || t('Related')}
-                />
+                <ContentHeader link={`/resources`} title={title || t('Related')} />
             </div>
             {relatedData?.length > 0 ? (
                 <div className={cn('grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5')}>
@@ -32,7 +29,7 @@ export default function ScrollCardSection({ title, containerClassName }: { title
                     ))}
                     <div className="relative z-10 flex h-full min-h-40 w-full items-center justify-center overflow-hidden rounded-md border-2 border-background pl-6 shadow dark:border-border">
                         <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/5 dark:stroke-neutral-100/5" />
-                        <Link href={`/resources/${mainCategory?.code}?category_code=${showData?.category?.code || ''}`} prefetch>
+                        <Link href={`/resources`} prefetch>
                             <HoverButton />
                         </Link>
                     </div>

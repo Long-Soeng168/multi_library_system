@@ -38,12 +38,14 @@ export default function Footer() {
                         <div className="mb-6 flex items-center space-x-3">
                             {/* <FooterLogo /> */}
                             <img alt="Logo" className="h-10 w-auto" src={`/assets/images/website_infos/thumb/${website_info.logo}`} />
-                            <span className="text-2xl font-bold text-white">Banalai</span>
+                            <span className="text-2xl font-bold text-white">
+                                {currentLocale === 'kh' ? website_info?.name_kh || website_info?.name : website_info?.name}
+                            </span>
                         </div>
                         <p className="mb-6 max-w-md leading-relaxed text-gray-400">
-                            {t(
-                                'Empowering libraries, schools, and organizations with flexible digital library solutions. We believe in making knowledge accessible to everyone through innovative technology.',
-                            )}
+                            {currentLocale === 'kh'
+                                ? website_info?.short_description_kh || website_info?.short_description
+                                : website_info?.short_description}
                         </p>
                         <div className="flex gap-2">
                             {media_links?.map((item: any) => (

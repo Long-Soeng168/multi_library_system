@@ -45,11 +45,20 @@ class FrontPageController extends Controller
         $libraries = Cache::flexible("libraries_index_front_page", [3600, 7200], function () {
             return Library::orderBy('order_index')->get();
         });
+
+        $hero = Cache::flexible("hero_data", [3600, 7200], function () {
+            return Page::where('code', 'hero')->first();
+        });
+        $get_started_free = Cache::flexible("get_started_free_data", [3600, 7200], function () {
+            return Page::where('code', 'get-started-free')->first();
+        });
         // return $libraries;
 
         return Inertia::render('FrontPage/Index', [
             'recentItems' => $recentItems,
             'libraries' => $libraries,
+            'hero' => $hero,
+            'get_started_free' => $get_started_free,
         ]);
     }
     public function page_show(string $page_code)
@@ -65,9 +74,12 @@ class FrontPageController extends Controller
     public function pricing()
     {
         $tableData = Plan::orderBy('order_index')->get();
+        $pricingPlans = Page::where('code', 'pricing-plans')->first();
+
         // return $tableData;
         return Inertia::render('FrontPage/Pricing/Index', [
             'tableData' => $tableData,
+            'pricingPlans' => $pricingPlans,
         ]);
     }
 

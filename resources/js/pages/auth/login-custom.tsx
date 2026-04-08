@@ -1,16 +1,11 @@
 import LoginForm from '@/components/Auth/LoginForm';
+import useTranslation from '@/hooks/use-translation';
 import FrontPageLayout from '@/layouts/FrontPageLayout';
-import { Link } from '@inertiajs/react';
-import { BookOpenIcon, ShieldCheckIcon, SmartphoneIcon, ZapIcon } from 'lucide-react';
+import { usePage } from '@inertiajs/react';
 
 const BanalaiLogin = () => {
-    // Adjusted for better visibility in both modes
-    const imgBgColors = [
-        'bg-yellow-500/20 border border-yellow-400/30',
-        'bg-green-500/20 border border-green-400/30',
-        'bg-yellow-500/20 border border-yellow-400/30',
-        'bg-slate-100/20 border border-slate-100/10',
-    ];
+    const { loginLeftSideContent } = usePage<any>().props;
+    const { t, currentLocale } = useTranslation();
 
     return (
         <FrontPageLayout>
@@ -22,75 +17,26 @@ const BanalaiLogin = () => {
                         <div className="overflow-hidden rounded-2xl border bg-card text-card-foreground shadow-2xl transition-colors">
                             <div className="grid grid-cols-1 lg:grid-cols-2">
                                 {/* Left Side - Branding (Stays vibrant but slightly deeper for dark mode) */}
-                                <div className="hidden flex-col justify-center bg-[linear-gradient(141deg,#4f46e5,#4a4ae6,#454de7,#3f51e7,#3a55e8,#3558e9,#305cea,#2a5fea,#2563eb,#236bd7,#2173c3,#1f7baf,#1e839b,#1c8b86,#1a9372,#189b5e,#16a34a)] p-12 text-white lg:flex">
-                                    <h2 className="mb-4 text-3xl font-bold tracking-tight">Join Banalai Today</h2>
-                                    <p className="mb-10 text-lg text-indigo-100/90">
-                                        Create your account and start accessing thousands of digital resources.
-                                    </p>
-
-                                    <div className="space-y-6">
-                                        {[
-                                            {
-                                                title: 'Digital Library Access',
-                                                desc: 'Access millions of digital resources, e-books, and journals from anywhere.',
-                                                icon: BookOpenIcon, // Pass the component reference
-                                            },
-                                            {
-                                                title: 'Secure & Reliable',
-                                                desc: 'Your data is protected with enterprise-grade security and encryption.',
-                                                icon: ShieldCheckIcon,
-                                            },
-                                            {
-                                                title: 'Fast & Efficient',
-                                                desc: 'Lightning-fast search and instant access to all your library resources.',
-                                                icon: ZapIcon,
-                                            },
-                                            {
-                                                title: 'Mobile Friendly',
-                                                desc: 'Access your library on any device, anywhere, at any time.',
-                                                icon: SmartphoneIcon,
-                                            },
-                                        ].map((item, index) => {
-                                            const Icon = item.icon; // Capitalize to use as a component
-                                            return (
-                                                <div key={index} className="flex items-start">
-                                                    <div
-                                                        className={`mr-4 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg ${imgBgColors[index % imgBgColors.length]}`}
-                                                    >
-                                                        <Icon className="h-6 w-6 text-white" strokeWidth={2} />
-                                                    </div>
-                                                    <div>
-                                                        <h3 className="mb-1 text-xl font-semibold">{item.title}</h3>
-                                                        <p className="text-indigo-100/80">{item.desc}</p>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-
-                                    <div className="mt-12 border-t border-white/10 pt-8">
-                                        <p className="text-sm text-indigo-100/70">Don't have an account?</p>
-                                        <Link href="/register" className="inline-flex items-center font-semibold text-white hover:underline">
-                                            Create an account
-                                            <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                                            </svg>
-                                        </Link>
-                                    </div>
-                                </div>
-
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html:
+                                            currentLocale === 'kh'
+                                                ? loginLeftSideContent?.long_description_kh || loginLeftSideContent?.long_description
+                                                : loginLeftSideContent?.long_description,
+                                    }}
+                                ></div>
                                 {/* Right Side - Form (Adapts to Dark/Light) */}
                                 <div className="bg-card p-8 lg:p-12">
                                     <div className="mx-auto max-w-md">
                                         <div className="mb-8 text-center">
-                                            <h1 className="mb-2 text-3xl font-bold text-foreground">Sign In</h1>
-                                            <p className="text-muted-foreground">Welcome back! Please login to your account.</p>
+                                            <h1 className="mb-2 text-3xl font-bold text-foreground">{t('Login')}</h1>
+                                            <p className="text-muted-foreground">{t("Welcome back! Please login to your account.")}</p>
                                         </div>
 
                                         <LoginForm />
 
                                         {/* Divider */}
-                                        <div className="my-8 flex items-center">
+                                        {/* <div className="my-8 flex items-center">
                                             <div className="flex-1 border-t border-border" />
                                             <span className="px-4 text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                                 Or continue with
@@ -98,7 +44,6 @@ const BanalaiLogin = () => {
                                             <div className="flex-1 border-t border-border" />
                                         </div>
 
-                                        {/* Social Login Buttons */}
                                         <div className="mb-6 grid grid-cols-2 gap-4">
                                             <SocialButton label="Google">
                                                 <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
@@ -135,7 +80,7 @@ const BanalaiLogin = () => {
                                                     Sign up
                                                 </Link>
                                             </p>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </div>

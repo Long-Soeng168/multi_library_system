@@ -305,7 +305,7 @@ export default function MyCkeditor5({ data, setData }: { data: string; setData: 
                     allow: [
                         {
                             name: /^.*$/,
-                            styles: false,
+                            styles: true,
                             attributes: true,
                             classes: true,
                         },

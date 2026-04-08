@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,9 +19,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(Request $request): Response
     {
+        $loginLeftSideContent = Page::where('code', 'login-left-side-content')->first();
         return Inertia::render('auth/login-custom', [
             'canResetPassword' => Route::has('password.request'),
             'status' => $request->session()->get('status'),
+            'loginLeftSideContent' => $loginLeftSideContent,
         ]);
     }
 
