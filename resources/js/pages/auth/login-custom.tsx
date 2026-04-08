@@ -30,7 +30,7 @@ const BanalaiLogin = () => {
                                     <div className="mx-auto max-w-md">
                                         <div className="mb-8 text-center">
                                             <h1 className="mb-2 text-3xl font-bold text-foreground">{t('Login')}</h1>
-                                            <p className="text-muted-foreground">{t("Welcome back! Please login to your account.")}</p>
+                                            <p className="text-muted-foreground">{t("Welcome! Please login to your account.")}</p>
                                         </div>
 
                                         <LoginForm />
