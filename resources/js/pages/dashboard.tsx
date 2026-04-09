@@ -194,8 +194,10 @@ export default function Dashboard() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             {hasPermission('item view') && <DashboardChart />}
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
+            <div className='px-2'>
                 <LibraryStatusCard />
+            </div>
+            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <UserActivePlan />
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     {user_library?.code ? (

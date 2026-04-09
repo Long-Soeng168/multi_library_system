@@ -1,6 +1,7 @@
 import ExportButton from '@/components/Button/ExportButton';
 import NewItemButton from '@/components/Button/NewItemButton';
 import RefreshButton from '@/components/Button/RefreshButton';
+import LibraryStatusCard from '@/components/Card/LibraryStatusCard';
 import LimitReachedDialog from '@/components/Dialog/LimitReachedDialog';
 import FilterByLibrary from '@/components/Filter/FilterByLibrary';
 import PaginationTabs from '@/components/Pagination/PaginationTabs';
@@ -26,6 +27,7 @@ const Index = () => {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <>
+                <LibraryStatusCard />
                 <div className="flex flex-wrap items-center justify-between gap-2 px-2 pt-6 pb-5">
                     <div className="flex w-full gap-2 md:w-auto">
                         <FilterData />
@@ -35,13 +37,21 @@ const Index = () => {
                     <div className="flex w-full justify-end gap-2 md:w-auto">
                         {/* Add New Dialog */}
                         <ExportButton endpoint="/users-export" />
-                        {!hasPermission('item view') && user_library?.items_count >= user_active_plan?.plan?.max_books ? (
+                        {!hasPermission('user view') && user_library?.items_count >= user_active_plan?.plan?.max_books ? (
                             <LimitReachedDialog />
                         ) : (
-                            <NewItemButton
-                                url={hasPermission('user view') ? '/admin/users/create' : `/dashboard/library/${user_library?.code}/users/create`}
-                                permission=""
-                            />
+                            <>
+                                {(hasPermission('user view') || user_library?.status == 'active') && (
+                                    <NewItemButton
+                                        url={
+                                            hasPermission('user view')
+                                                ? '/admin/users/create'
+                                                : `/dashboard/library/${user_library?.code}/users/create`
+                                        }
+                                        permission=""
+                                    />
+                                )}
+                            </>
                         )}
                     </div>
                 </div>

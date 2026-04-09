@@ -43,7 +43,7 @@ class FrontPageController extends Controller
         });
 
         $libraries = Cache::flexible("libraries_index_front_page", [3600, 7200], function () {
-            return Library::orderBy('order_index')->get();
+            return Library::where('status', 'active')->orderBy('order_index')->get();
         });
 
         $hero = Cache::flexible("hero_data", [3600, 7200], function () {

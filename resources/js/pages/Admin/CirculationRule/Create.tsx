@@ -1,6 +1,7 @@
 import AlertFlashMessage from '@/components/Alert/AlertFlashMessage';
 import AllErrorsAlert from '@/components/Alert/AllErrorsAlert';
 import SubmitButton from '@/components/Button/SubmitButton';
+import LibraryStatusCard from '@/components/Card/LibraryStatusCard';
 import { FormCombobox } from '@/components/Input/FormCombobox';
 import { FormField } from '@/components/Input/FormField';
 import { ProgressWithValue } from '@/components/ProgressBar/progress-with-value';
@@ -64,6 +65,7 @@ export default function Create({ libraries, editData, readOnly }: { libraries: a
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
+            <LibraryStatusCard />
             <form onSubmit={onSubmit} className="form">
                 <AlertFlashMessage
                     key={flashMessage.message}

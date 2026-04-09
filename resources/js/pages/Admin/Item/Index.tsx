@@ -1,6 +1,7 @@
 import ExportButton from '@/components/Button/ExportButton';
 import NewItemButton from '@/components/Button/NewItemButton';
 import RefreshButton from '@/components/Button/RefreshButton';
+import LibraryStatusCard from '@/components/Card/LibraryStatusCard';
 import LimitReachedDialog from '@/components/Dialog/LimitReachedDialog';
 import FilterByLibrary from '@/components/Filter/FilterByLibrary';
 import PaginationTabs from '@/components/Pagination/PaginationTabs';
@@ -28,6 +29,7 @@ const Index = () => {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <>
+                <LibraryStatusCard />
                 <div className="flex flex-wrap items-center justify-between gap-2 px-2 pt-6 pb-5">
                     <div className="flex w-full gap-2 md:w-auto">
                         <FilterData />
@@ -40,14 +42,18 @@ const Index = () => {
                         {!hasPermission('item view') && user_library?.items_count >= user_active_plan?.plan?.max_books ? (
                             <LimitReachedDialog />
                         ) : (
-                            <NewItemButton
-                                url={
-                                    hasPermission('item view')
-                                        ? `/admin/items/create?main_category_code=${main_category_code || ''}`
-                                        : `/dashboard/library/${user_library?.code}/items/create?main_category_code=${main_category_code || ''}`
-                                }
-                                permission=""
-                            />
+                            <>
+                                {(hasPermission('item view') || user_library?.status == 'active') && (
+                                    <NewItemButton
+                                        url={
+                                            hasPermission('item view')
+                                                ? `/admin/items/create?main_category_code=${main_category_code || ''}`
+                                                : `/dashboard/library/${user_library?.code}/items/create?main_category_code=${main_category_code || ''}`
+                                        }
+                                        permission=""
+                                    />
+                                )}
+                            </>
                         )}
                     </div>
                 </div>

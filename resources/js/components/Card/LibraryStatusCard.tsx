@@ -3,12 +3,19 @@ import { Link, usePage } from '@inertiajs/react';
 import { AlertCircle, ArrowRight, Ban, CheckCircle2, ExternalLink, HelpCircle, MessageCircle, ShieldAlert, Timer } from 'lucide-react';
 
 const LibraryStatusCard = () => {
-    const { user_library } = usePage<any>().props;
+    const { props, url } = usePage<any>();
+    const { user_library } = props;
     const { t } = useTranslation();
 
     if (!user_library?.code) return null;
 
     const status = user_library.status || 'default';
+
+    // 2. Add the specific condition for 'active' and '/dashboard'
+    if (status === 'active' && url !== '/dashboard') {
+        return null;
+    }
+
     const isActive = status === 'active';
 
     const statusMap: Record<string, any> = {
@@ -66,9 +73,7 @@ const LibraryStatusCard = () => {
     const currentTheme = themes[config.theme] || themes.blue;
 
     return (
-        <div
-            className={`group relative overflow-hidden rounded-xl border backdrop-blur-sm transition-all duration-300 ${currentTheme}`}
-        >
+        <div className={`group relative m-2 overflow-hidden rounded-xl border backdrop-blur-sm transition-all duration-300 ${currentTheme}`}>
             {/* Ambient Background Glow */}
             <div className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-current opacity-[0.03] blur-3xl transition-opacity group-hover:opacity-[0.08]" />
 

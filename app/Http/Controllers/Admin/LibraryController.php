@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
+use App\Models\CirculationRule;
 use App\Models\Library;
+use App\Models\Plan;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -162,6 +165,22 @@ class LibraryController extends Controller implements HasMiddleware
             return DB::transaction(function () use ($validated) {
                 // 1. Create the library
                 $library = Library::create($validated);
+
+                if ($library) {
+                    CirculationRule::create([
+                        'fine_amount_per_day' => 500,
+                        'max_fines_amount' => 50000,
+                        'borrowing_limit' => 2,
+                        'loan_period' => 14,
+                        'library_id' => $library->id,
+                    ]);
+
+                    Subscription::create([
+                        'library_id' => $library->id,
+                        'plan_id' => 1,
+                        'status' => 'active',
+                    ]);
+                }
 
                 // 2. Assign Owner Role
                 if (!empty($validated['owner_id'])) {

@@ -1,6 +1,7 @@
 import ExportButton from '@/components/Button/ExportButton';
 import NewItemButton from '@/components/Button/NewItemButton';
 import RefreshButton from '@/components/Button/RefreshButton';
+import LibraryStatusCard from '@/components/Card/LibraryStatusCard';
 import FilterByLibrary from '@/components/Filter/FilterByLibrary';
 import PaginationTabs from '@/components/Pagination/PaginationTabs';
 import TableDataSearch from '@/components/Search/TableDataSearch';
@@ -10,7 +11,6 @@ import { cn } from '@/lib/utils';
 import { BreadcrumbItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { AlertCircle, ArrowLeftRightIcon, Banknote, BookOpen, CheckCircle2, History } from 'lucide-react';
-import FilterData from './FilterData';
 import TableData from './TableData';
 
 const Index = () => {
@@ -38,6 +38,7 @@ const Index = () => {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <>
+                <LibraryStatusCard />
                 <div className="flex flex-wrap items-center justify-between gap-2 px-2 py-6 pb-5">
                     <div className="flex w-full gap-2 md:w-auto">
                         {/* Filters specific to loans (Status, Fines, etc.) */}

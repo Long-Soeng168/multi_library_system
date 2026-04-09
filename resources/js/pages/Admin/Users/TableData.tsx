@@ -82,9 +82,10 @@ const TableData = () => {
                                             />
 
                                             {/* Delete Item */}
-                                            {!item.roles.some((role: { name: string }) => role.name === 'Super Admin') && (
-                                                <DeleteItemButton deletePath="/admin/users/" id={item.id} permission="" />
-                                            )}
+                                            {!item.roles.some((role: { name: string }) => role.name === 'Super Admin') ||
+                                                (item?.library_role != 'owner' && (
+                                                    <DeleteItemButton deletePath="/admin/users/" id={item.id} permission="" />
+                                                ))}
                                         </>
                                     )}
                                 </TableCellActions>
